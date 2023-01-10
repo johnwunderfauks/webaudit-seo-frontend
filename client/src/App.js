@@ -26,11 +26,18 @@ function App() {
     }
     //Check if nodejs is down ?
     setIsLoading(true);
+
+    addJob(currentEmail, currURL);
   };
 
   // Kick off a new job by POST-ing to the server
   async function addJob() {
-    let res = await fetch("job/", { method: "POST" });
+    let res = await fetch(
+      `job/?email=${encodeURIComponent(currentEmail)}&url=${encodeURIComponent(
+        currURL
+      )}`,
+      { method: "POST" }
+    );
     let job = await res.json();
     //jobs[job.id] = { id: job.id, state: "queued" };
     setJobs({ id: job.id, state: "queued" });
@@ -129,6 +136,6 @@ function App() {
     );
   }
 
-  return render();
+  return renderUI();
 }
 export default App;

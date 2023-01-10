@@ -12,7 +12,8 @@
     "throng": "^4.0.0"
   },
   "scripts": {
-    "start": "nf start"
+    "start": "nf start",
+    "client-build": "cd client && npm run build"
   },
   "proxy" : "http://127.0.0.1:3001"
 }

@@ -12,14 +12,14 @@
     "express": "^4.16.4",
     "foreman": "^3.0.1",
     "lighthouse": "^9.6.8",
+    "ln": "^0.4.3",
     "nodemailer": "^6.8.0",
     "pdfkit": "^0.13.0",
     "redis": "^4.5.1",
     "throng": "^4.0.0"
   },
   "scripts": {
-    "start": "nf start",
-    "client-build": "cd client && npm run build"
+    "start": "cd client && npm run build && nf start"
   },
   "proxy": "http://127.0.0.1:3001"
 }

@@ -1,6 +1,7 @@
 let throng = require("throng");
 let Queue = require("bull");
-
+var ln = require("ln");
+ln.PIPE_BUF = 512; //Set it in byte unit and based on the ulimit -a.
 require("dotenv").config({ path: `.env`, override: true });
 // Tools for lighthouse scrape
 var log = new ln({ name: "a", appenders: appenders });

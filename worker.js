@@ -186,7 +186,7 @@ async function sendEmail(userEmail, userURL, pdf) {
   }
 }
 
-function generateRandomString = (myLength) => {
+function generateRandomString(myLength) {
   const chars =
     "AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890";
   const randomArray = Array.from(
@@ -196,7 +196,7 @@ function generateRandomString = (myLength) => {
 
   const randomString = randomArray.join("");
   return randomString;
-};
+}
 
 // Initialize the clustered worker process
 // See: https://devcenter.heroku.com/articles/node-concurrency for more info

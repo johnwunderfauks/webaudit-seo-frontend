@@ -21,12 +21,14 @@
     "throng": "^4.0.0"
   },
   "scripts": {
+    "dev": "concurrently -n \"server,client\" \"npm run start:server:dev\" \"npm run start:client\"",
     "install:client": "cd ./client && npm install",
-    "start:server:dev": "nodemon ./server/server.js", 
-    "start": "npm run build && npm run start:server",
+    "start:server:dev": "nodemon ./server.js",
+    "start:server": "nf start",
+    "start:client": "cd ./client && cross-env PORT=4200 npm run start",
     "build": "cd ./client && npm run build",
-    "heroku-postbuild": "npm run install:client && npm run build"
-    
+    "heroku-postbuild": "npm run install:client && npm run build",
+    "start": "npm run build && nf start"
   },
   "repository": {
     "type": "git",

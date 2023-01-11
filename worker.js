@@ -1,12 +1,12 @@
 let throng = require("throng");
 let Queue = require("bull");
-let ln = require("ln");
-ln.PIPE_BUF = 512; //Set it in byte unit and based on the ulimit -a.
-var log = new ln({ name: "a", appenders: appenders });
+// let ln = require("ln");
+// ln.PIPE_BUF = 512; //Set it in byte unit and based on the ulimit -a.
+// var log = new ln({ name: "a", appenders: appenders });
 require("dotenv").config({ path: `.env`, override: true });
 // Tools for lighthouse scrape
 
-log.e("ln"); //Android-like logging signature:
+//log.e("ln"); //Android-like logging signature:
 let axios = require("axios");
 let puppeteer = require("puppeteer");
 let lighthouse = require("lighthouse");
@@ -65,7 +65,7 @@ function start() {
         .join(", ")}`;
       job.progress(25);
       //console.log("worker : ", lighthouseScores);
-      log.e("worker thread lighthouse done: ", lighthouseScores);
+      //log.e("worker thread lighthouse done: ", lighthouseScores);
 
       var strapiData = {
         data: {
@@ -115,7 +115,7 @@ function start() {
         });
     } catch (err) {
       // console.log("worker error: ", err);
-      log.e("worker error: ", err);
+      //log.e("worker error: ", err);
       await browser.close();
       throw new Error("worker error: ", err);
     }

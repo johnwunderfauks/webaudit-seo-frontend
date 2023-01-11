@@ -21,7 +21,7 @@
   },
   "scripts": {
     "start": "nf start",
-    "build": "./cd client && npm run build"
+    "build": "cd ./client && npm run build"
   },
   "heroku-run-build-script": true,
   "proxy": "http://127.0.0.1:3001"

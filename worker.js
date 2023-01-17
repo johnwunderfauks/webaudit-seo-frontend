@@ -1,5 +1,6 @@
-let throng = require("throng");
-let Queue = require("bull");
+const throng = require("throng");
+const Queue = require("bull");
+const path = require("path");
 // let ln = require("ln");
 // ln.PIPE_BUF = 512; //Set it in byte unit and based on the ulimit -a.
 // var log = new ln({ name: "a", appenders: appenders });
@@ -7,14 +8,14 @@ require("dotenv").config({ path: `.env`, override: true });
 // Tools for lighthouse scrape
 
 //log.e("ln"); //Android-like logging signature:
-let axios = require("axios");
-let puppeteer = require("puppeteer");
-let lighthouse = require("lighthouse");
-let { URL } = require("url");
-let { format } = require("date-fns");
-let nodemailer = require("nodemailer");
-let PDFDocument = require("pdfkit");
-let fs = require("fs");
+const axios = require("axios");
+const puppeteer = require("puppeteer");
+const lighthouse = require("lighthouse");
+const { URL } = require("url");
+const { format } = require("date-fns");
+const nodemailer = require("nodemailer");
+const PDFDocument = require("pdfkit");
+const fs = require("fs");
 // Connect to a local redis instance locally, and the Heroku-provided URL in production
 let REDIS_URL = process.env.REDIS_URL || "redis://127.0.0.1:6379";
 

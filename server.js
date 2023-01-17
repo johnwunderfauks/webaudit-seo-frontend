@@ -20,12 +20,13 @@ let workQueue = new Queue("work", REDIS_URL);
 //   res.sendFile("client.js", { root: __dirname })
 // );
 //app.use("/", express.static(path.dirname(__dirname) + "/client/build"));
+
 app.get("/", (req, res) =>
   res.sendFile(path.dirname(__dirname) + "/client/build/index.html", {
     root: __dirname,
   })
 );
-
+app.use("/static", express.static(__dirname + "/client/build/static"));
 app.post("/api/getresults", async (req, res) => {});
 
 // Kick off a new job by adding it to the work queue

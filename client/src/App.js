@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import logo from "./logo.svg";
 import "./App.css";
 function App() {
-  const newState = {};
   //const [jobs, setJobs] = useState(null);
   const [data, setData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -11,7 +10,7 @@ function App() {
   const [currentEmail, setEmail] = useState("");
   useEffect(() => {});
   // Store for all of the jobs in progress
-  //let jobs = {};
+  let jobs = {};
   const handleEmailChange = (event) => {
     setEmail(event.target.value);
   };
@@ -40,8 +39,8 @@ function App() {
       { method: "POST" }
     );
     let job = await res.json();
-    //jobs[job.id] = { id: job.id, state: "queued" };
-    setJobs({ id: job.id, state: "queued" });
+    jobs[job.id] = { id: job.id, state: "queued" };
+    //setJobs({ id: job.id, state: "queued" });
     render();
   }
 
@@ -59,7 +58,8 @@ function App() {
 
   // Delete all stored jobs
   function clear() {
-    setJobs(null);
+    //setJobs(null);
+    jobs = [];
     render();
   }
 

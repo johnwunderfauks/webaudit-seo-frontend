@@ -127,11 +127,17 @@ function App() {
         </header>
         <div className="job-template">
           {jobs &&
-            jobs.forEach((currJob) => {
+            jobs.map((currJob) => (
               <div className="job-item">
                 {currJob.id} - {currJob.status}
-              </div>;
-            })}
+              </div>
+            ))}
+          {/* jobs.forEach((currJob) => {
+               <div className="job-item">
+                 {currJob.id} - {currJob.status}
+               </div>;
+             }
+             )} */}
         </div>
       </div>
     );

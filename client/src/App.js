@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react";
 import logo from "./logo.svg";
 import "./App.css";
 function App() {
-  const [jobs, setJobs] = useState(null);
+  const newState = {};
+  //const [jobs, setJobs] = useState(null);
   const [data, setData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [err, setErr] = useState("");

@@ -2,12 +2,14 @@ require("dotenv").config({ path: `.env`, override: true });
 const express = require("express");
 const Queue = require("bull");
 const path = require("path");
+const cors = require("cors");
 // Serve on PORT on Heroku and on localhost:5000 locally
 let PORT = process.env.PORT || "5000";
 // Connect to a local redis intance locally, and the Heroku-provided URL in production
 let REDIS_URL = process.env.REDIS_URL || "redis://127.0.0.1:6379";
 
 const app = express();
+app.use(cors());
 
 // Create / Connect to a named work queue
 let workQueue = new Queue("work", REDIS_URL);
@@ -17,7 +19,12 @@ let workQueue = new Queue("work", REDIS_URL);
 // app.get("/client.js", (req, res) =>
 //   res.sendFile("client.js", { root: __dirname })
 // );
-app.use("/", express.static(path.dirname(__dirname) + "/client/build"));
+//app.use("/", express.static(path.dirname(__dirname) + "/client/build"));
+app.get("/", (req, res) =>
+  res.sendFile(path.dirname(__dirname) + "/client/build/index.html", {
+    root: __dirname,
+  })
+);
 
 app.post("/api/getresults", async (req, res) => {});
 

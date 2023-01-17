@@ -1,6 +1,6 @@
 const throng = require("throng");
 const Queue = require("bull");
-const path = require("path");
+
 // let ln = require("ln");
 // ln.PIPE_BUF = 512; //Set it in byte unit and based on the ulimit -a.
 // var log = new ln({ name: "a", appenders: appenders });

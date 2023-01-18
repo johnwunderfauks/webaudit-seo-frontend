@@ -17,7 +17,6 @@
     "ln": "^0.4.3",
     "nodemailer": "^6.8.0",
     "pdfkit": "^0.13.0",
-    "puppeteer": "^19.5.0",
     "redis": "^4.5.1",
     "throng": "^4.0.0"
   },
@@ -28,7 +27,7 @@
     "start:server": "nf start",
     "start:client": "cd ./client && cross-env PORT=4200 npm run start",
     "build": "cd ./client && npm run build",
-    "heroku-postbuild": "npm run install:client && npm run build",
+    "heroku-postbuild": "npm run install:client && npm run build && node node_modules/puppeteer/install.js",
     "start": "npm run build && nf start"
   },
   "repository": {
@@ -36,5 +35,8 @@
     "url": "git+https://github.com/johnwunderfauks/webaudit-seo-frontend"
   },
   "heroku-run-build-script": true,
-  "proxy": "http://127.0.0.1:3001"
+  "proxy": "http://127.0.0.1:3001",
+  "devDependencies": {
+    "puppeteer": "^19.5.2"
+  }
 }

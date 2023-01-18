@@ -49,7 +49,7 @@ function start() {
 
     var currEmail = job.email;
     var currURL = job.url;
-
+    console.log("Job Parameters: ", job.id, " ", job.email, job.url);
     try {
       // Use Puppeteer to launch headful Chrome and don't use its default 800x600 viewport.
       const browser = await puppeteer.launch({
@@ -60,6 +60,7 @@ function start() {
       // Lighthouse will open the URL.
       // Puppeteer will observe `targetchanged` and inject our stylesheet.
       job.progress(5);
+      console.log("Job Lighouse Started: ", job.id);
       const { lhr } = await lighthouse(currURL, {
         port: new URL(browser.wsEndpoint()).port,
         output: "json",
@@ -69,6 +70,7 @@ function start() {
       var lighthouseScores = `${Object.values(lhr.categories)
         .map((c) => c.score)
         .join(", ")}`;
+      console.log("Job Lighouse Done: ", job.id);
       job.progress(25);
       //console.log("worker : ", lighthouseScores);
       //log.e("worker thread lighthouse done: ", lighthouseScores);
@@ -87,6 +89,7 @@ function start() {
           Authorization: process.env.SEO_AUDIT_KEY,
         },
       };
+      console.log("Job Creating PDF: ", job.id);
       // Create a new PDF document
       job.progress(55);
       const doc = new PDFDocument();
@@ -98,7 +101,9 @@ function start() {
       // Save the PDF to a file
       doc.pipe(fs.createWriteStream("./uploads/" + fileName));
       doc.end();
+      console.log("Job PDF Done: ", job.id);
       job.progress(75);
+      console.log("Posting to Strapi: ", job.id);
       var strapiMsg = "";
       const strapiResults = await axios
         .post(process.env.SEO_AUDIT_RESULTS_URL, strapiData, strapiHeaders)
@@ -115,6 +120,7 @@ function start() {
           browser.close();
           job.progress(100);
           job.state = JobProgress.Completed;
+          console.log("Job Done: ", job.id);
         })
         .catch(function (error) {
           console.log("strapi error ", error);

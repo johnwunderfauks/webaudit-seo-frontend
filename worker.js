@@ -42,7 +42,7 @@ function start() {
   let workQueue = new Queue("work", REDIS_URL);
 
   workQueue.process(maxJobsPerWorker, async (job) => {
-    console.log("Job Starting: ", job.id);
+    console.log("Job Starting: ", job);
     // This is an example job that just slowly reports on progress
     // while doing no work. Replace this with your own job logic.
     let progress = 0;
@@ -50,6 +50,10 @@ function start() {
     var currEmail = job.email;
     var currURL = job.url;
     console.log("Job Parameters: ", job.id, " ", job.email, job.url);
+    if (!currEmail || !currURL) {
+      job.state = JobProgress.Failed;
+      return;
+    }
     try {
       // Use Puppeteer to launch headful Chrome and don't use its default 800x600 viewport.
       const browser = await puppeteer.launch({
@@ -124,15 +128,15 @@ function start() {
         })
         .catch(function (error) {
           console.log("strapi error ", error);
-          throw new Error("strapi error ", error);
           job.state = JobProgress.Failed;
+          throw new Error("strapi error ", error);
         });
     } catch (err) {
       // console.log("worker error: ", err);
       //log.e("worker error: ", err);
       await browser.close();
-      throw new Error("worker error: ", err);
       job.state = JobProgress.Failed;
+      throw new Error("worker error: ", err);
     }
 
     // throw an error 5% of the time

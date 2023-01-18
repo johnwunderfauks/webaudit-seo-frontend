@@ -133,7 +133,7 @@ function start() {
           throw new Error("strapi error ", error);
         });
     } catch (err) {
-      // console.log("worker error: ", err);
+      console.log("worker error: ", err);
       //log.e("worker error: ", err);
       await browser.close();
       job.progress = 1;

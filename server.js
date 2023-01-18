@@ -50,7 +50,8 @@ app.post("/job", async (req, res) => {
     let job = await workQueue.add({ email: currEmail, url: currURL });
     // job.email = currEmail;
     // job.url = currURL;
-    res.json({ id: job.id, email: currEmail, url: currURL });
+    //res.json({ id: job.id, email: currEmail, url: currURL });
+    res.json({ id: job });
   }
 });
 

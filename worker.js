@@ -50,10 +50,10 @@ function start() {
     var currEmail = job.data.email;
     var currURL = job.data.url;
     console.log("Job Parameters: ", job.id, " ", currEmail, currURL);
-    if (!currEmail || !currURL) {
-      job.state = JobProgress.Failed;
-      return;
-    }
+    // if (!currEmail || !currURL) {
+    //   job.state = JobProgress.Failed;
+    //   return;
+    // }
     try {
       // Use Puppeteer to launch headful Chrome and don't use its default 800x600 viewport.
       const browser = await puppeteer.launch({

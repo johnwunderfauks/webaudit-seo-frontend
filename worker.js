@@ -28,6 +28,10 @@ let workers = process.env.WEB_CONCURRENCY || 2;
 // responses it can be much higher. If each job is CPU-intensive, it might need
 // to be much lower.
 let maxJobsPerWorker = 5;
+const JobProgress = {
+  Completed: "completed",
+  Failed: "failed",
+};
 
 function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -110,16 +114,19 @@ function start() {
 
           browser.close();
           job.progress(100);
+          job.state = JobProgress.Completed;
         })
         .catch(function (error) {
           console.log("strapi error ", error);
           throw new Error("strapi error ", error);
+          job.state = JobProgress.Failed;
         });
     } catch (err) {
       // console.log("worker error: ", err);
       //log.e("worker error: ", err);
       await browser.close();
       throw new Error("worker error: ", err);
+      job.state = JobProgress.Failed;
     }
 
     // throw an error 5% of the time

@@ -92,12 +92,20 @@ function App() {
       progress = 100;
     }
 
-    return document
-      .querySelector("#job-template")
-      .innerHTML.replace("{{id}}", job.id)
-      .replace("{{state}}", job.state)
-      .replace("{{color}}", color)
-      .replace("{{progress}}", progress);
+    return (
+      <div className="job-item">
+        <div style={{ display: "inline-block" }}>{job.id}</div>
+        <div style={{ display: "inline-block" }}>{job.progress}</div>
+        <div style={{ display: "inline-block" }}>{job.state}</div>
+      </div>
+    );
+
+    // return document
+    //   .querySelector("#job-template")
+    //   .innerHTML.replace("{{id}}", job.id)
+    //   .replace("{{state}}", job.state)
+    //   .replace("{{color}}", color)
+    //   .replace("{{progress}}", progress);
   }
 
   // Attach click handlers and kick off background processes

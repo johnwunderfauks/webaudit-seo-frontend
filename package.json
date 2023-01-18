@@ -28,7 +28,7 @@
     "start:server": "nf start",
     "start:client": "cd ./client && cross-env PORT=4200 npm run start",
     "build": "cd ./client && npm run build",
-    "heroku-postbuild": "npm run install:server && npm run install:client && npm run build",
+    "heroku-postbuild": "npm run install:client && npm run build",
     "start": "npm run build && nf start"
   },
   "repository": {

@@ -49,7 +49,7 @@ function start() {
 
     var currEmail = job.data.email;
     var currURL = job.data.url;
-    console.log("Job Parameters: ", job.id, " ", job.email, job.url);
+    console.log("Job Parameters: ", job.id, " ", currEmail, currURL);
     if (!currEmail || !currURL) {
       job.state = JobProgress.Failed;
       return;
@@ -63,8 +63,8 @@ function start() {
 
       // Lighthouse will open the URL.
       // Puppeteer will observe `targetchanged` and inject our stylesheet.
-      job.progress(5);
-      console.log("Job Lighouse Started: ", job.id);
+      // job.progress(5);
+      console.log("Job Lighthouse Started: ", job.id);
       const { lhr } = await lighthouse(currURL, {
         port: new URL(browser.wsEndpoint()).port,
         output: "json",
@@ -75,7 +75,7 @@ function start() {
         .map((c) => c.score)
         .join(", ")}`;
       console.log("Job Lighouse Done: ", job.id);
-      job.progress(25);
+      // job.progress(25);
       //console.log("worker : ", lighthouseScores);
       //log.e("worker thread lighthouse done: ", lighthouseScores);
 
@@ -95,7 +95,7 @@ function start() {
       };
       console.log("Job Creating PDF: ", job.id);
       // Create a new PDF document
-      job.progress(55);
+      // job.progress(55);
       const doc = new PDFDocument();
       var fileName = generateRandomString(15) + ".pdf";
       // Add some text and a rectangle
@@ -106,7 +106,7 @@ function start() {
       doc.pipe(fs.createWriteStream("./uploads/" + fileName));
       doc.end();
       console.log("Job PDF Done: ", job.id);
-      job.progress(75);
+      // job.progress(75);
       console.log("Posting to Strapi: ", job.id);
       var strapiMsg = "";
       const strapiResults = await axios
@@ -128,6 +128,7 @@ function start() {
         })
         .catch(function (error) {
           console.log("strapi error ", error);
+          job.progress = 1;
           job.state = JobProgress.Failed;
           throw new Error("strapi error ", error);
         });
@@ -135,6 +136,7 @@ function start() {
       // console.log("worker error: ", err);
       //log.e("worker error: ", err);
       await browser.close();
+      job.progress = 1;
       job.state = JobProgress.Failed;
       throw new Error("worker error: ", err);
     }

@@ -42,13 +42,13 @@ function start() {
   let workQueue = new Queue("work", REDIS_URL);
 
   workQueue.process(maxJobsPerWorker, async (job) => {
-    console.log("Job Starting: ", job);
+    console.log("Job Starting: ", job.id);
     // This is an example job that just slowly reports on progress
     // while doing no work. Replace this with your own job logic.
     let progress = 0;
 
-    var currEmail = job.email;
-    var currURL = job.url;
+    var currEmail = job.data.email;
+    var currURL = job.data.url;
     console.log("Job Parameters: ", job.id, " ", job.email, job.url);
     if (!currEmail || !currURL) {
       job.state = JobProgress.Failed;

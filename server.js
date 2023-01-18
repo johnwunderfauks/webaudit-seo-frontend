@@ -47,7 +47,9 @@ app.post("/job", async (req, res) => {
   console.log("worker api request starting on:", currURL, currEmail);
 
   if (currURL && currEmail) {
-    let job = await workQueue.add({ email: currEmail, url: currURL });
+    let job = await workQueue.add();
+    job.email = currEmail;
+    job.url = currURL;
     res.json({ id: job.id, email: currEmail, url: currURL });
   }
 });

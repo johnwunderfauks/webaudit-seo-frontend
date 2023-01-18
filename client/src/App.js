@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react";
 import logo from "./logo.svg";
 import "./App.css";
 function App() {
-  const [jobs, setJobs] = useState([]);
+  // const [jobs, setJobs] = useState([]);
+
   const [data, setData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [err, setErr] = useState("");
@@ -10,7 +11,7 @@ function App() {
   const [currentEmail, setEmail] = useState("");
   useEffect(() => {});
   // Store for all of the jobs in progress
-  // let jobs = {};
+  let jobs = {};
   const handleEmailChange = (event) => {
     setEmail(event.target.value);
   };
@@ -39,8 +40,9 @@ function App() {
       { method: "POST" }
     );
     let job = await res.json();
-    //jobs[job.id] = { id: job.id, state: "queued" };
-    setJobs({ id: job.id, state: "queued" });
+    jobs[job.id] = { id: job.id, state: "queued" };
+    // setJobs({ id: job.id, state: "queued" });
+
     render();
   }
 
@@ -58,23 +60,23 @@ function App() {
 
   // Delete all stored jobs
   function clear() {
-    setJobs(null);
-    //jobs = [];
+    //setJobs(null);
+    jobs = [];
     render();
   }
 
   // Update the UI
   function render() {
-    // let s = "";
-    // for (let id of Object.keys(jobs)) {
-    //   s += renderJob(jobs[id]);
-    // }
+    let s = "";
+    for (let id of Object.keys(jobs)) {
+      s += renderJob(jobs[id]);
+    }
 
     // For demo simplicity this blows away all of the existing HTML and replaces it,
     // which is very inefficient. In a production app a library like React or Vue should
     // handle this work
     //document.querySelector("#job-summary").innerHTML = s;
-    renderUI();
+    renderUI(s);
   }
 
   // Renders the HTML for each job object
@@ -106,7 +108,7 @@ function App() {
   //   setInterval(updateJobs, 200);
   // };
 
-  function renderUI() {
+  function renderUI(s) {
     return (
       <div className="App">
         <header className="App-header">
@@ -126,12 +128,13 @@ function App() {
           <button onClick={handleClick}>Fetch data</button>
         </header>
         <div className="job-template">
-          {jobs &&
+          {s}
+          {/* {jobs &&
             jobs.map((currJob) => (
               <div className="job-item">
                 {currJob.id} - {currJob.status}
               </div>
-            ))}
+            ))} */}
           {/* jobs.forEach((currJob) => {
                <div className="job-item">
                  {currJob.id} - {currJob.status}

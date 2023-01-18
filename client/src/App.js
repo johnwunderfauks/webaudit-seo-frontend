@@ -80,25 +80,25 @@ function App() {
   }
 
   // Renders the HTML for each job object
-  // function renderJob(job) {
-  //   let progress = job.progress || 0;
-  //   let color = "bg-light-purple";
+  function renderJob(job) {
+    let progress = job.progress || 0;
+    let color = "bg-light-purple";
 
-  //   if (job.state === "completed") {
-  //     color = "bg-purple";
-  //     progress = 100;
-  //   } else if (job.state === "failed") {
-  //     color = "bg-dark-red";
-  //     progress = 100;
-  //   }
+    if (job.state === "completed") {
+      color = "bg-purple";
+      progress = 100;
+    } else if (job.state === "failed") {
+      color = "bg-dark-red";
+      progress = 100;
+    }
 
-  //   return document
-  //     .querySelector("#job-template")
-  //     .innerHTML.replace("{{id}}", job.id)
-  //     .replace("{{state}}", job.state)
-  //     .replace("{{color}}", color)
-  //     .replace("{{progress}}", progress);
-  // }
+    return document
+      .querySelector("#job-template")
+      .innerHTML.replace("{{id}}", job.id)
+      .replace("{{state}}", job.state)
+      .replace("{{color}}", color)
+      .replace("{{progress}}", progress);
+  }
 
   // Attach click handlers and kick off background processes
   // window.onload = function () {

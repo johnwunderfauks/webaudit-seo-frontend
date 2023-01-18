@@ -3,6 +3,7 @@ const express = require("express");
 const Queue = require("bull");
 const path = require("path");
 const cors = require("cors");
+const { currentLineHeight } = require("pdfkit");
 // Serve on PORT on Heroku and on localhost:5000 locally
 let PORT = process.env.PORT || "5000";
 // Connect to a local redis intance locally, and the Heroku-provided URL in production
@@ -46,7 +47,7 @@ app.post("/job", async (req, res) => {
   console.log("worker api request starting on:", currURL, currEmail);
 
   if (currURL && currEmail) {
-    let job = await workQueue.add();
+    let job = await workQueue.add({ email: currEmail, url: currURL });
     res.json({ id: job.id, email: currEmail, url: currURL });
   }
 });

@@ -1,12 +1,11 @@
-
 // Store for all of the jobs in progress
 let jobs = {};
 
 // Kick off a new job by POST-ing to the server
 async function addJob() {
-  let res = await fetch('job/', {method: 'POST'});
+  let res = await fetch("job/", { method: "POST" });
   let job = await res.json();
-  jobs[job.id] = {id: job.id, state: "queued"};
+  jobs[job.id] = { id: job.id, state: "queued" };
   render();
 }
 
@@ -53,19 +52,19 @@ function renderJob(job) {
     color = "bg-dark-red";
     progress = 100;
   }
-  
-  return document.querySelector('#job-template')
-    .innerHTML
-    .replace('{{id}}', job.id)
-    .replace('{{state}}', job.state)
-    .replace('{{color}}', color)
-    .replace('{{progress}}', progress);
+
+  return document
+    .querySelector("#job-template")
+    .innerHTML.replace("{{id}}", job.id)
+    .replace("{{state}}", job.state)
+    .replace("{{color}}", color)
+    .replace("{{progress}}", progress);
 }
 
 // Attach click handlers and kick off background processes
-window.onload = function() {
+window.onload = function () {
   document.querySelector("#add-job").addEventListener("click", addJob);
   document.querySelector("#clear").addEventListener("click", clear);
 
-  setInterval(updateJobs, 200);
+  setInterval(updateJobs, 2000);
 };

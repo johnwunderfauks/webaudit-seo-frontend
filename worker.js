@@ -38,6 +38,7 @@ function start() {
   let workQueue = new Queue("work", REDIS_URL);
 
   workQueue.process(maxJobsPerWorker, async (job) => {
+    console.log("Job Starting: ", job.id);
     // This is an example job that just slowly reports on progress
     // while doing no work. Replace this with your own job logic.
     let progress = 0;

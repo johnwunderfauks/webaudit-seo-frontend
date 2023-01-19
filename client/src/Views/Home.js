@@ -6,7 +6,6 @@ import {
   TextField,
   Paper,
   FormControl,
-  Skeleton,
 } from "@mui/material";
 import LoadingButton from "@mui/lab/LoadingButton";
 import Living_Room from "../assets/Living_Room.svg";

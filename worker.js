@@ -9,7 +9,7 @@ require("dotenv").config({ path: `.env`, override: true });
 
 //log.e("ln"); //Android-like logging signature:
 const axios = require("axios");
-const puppeteer = require("puppeteer-core");
+const puppeteer = require("puppeteer");
 const lighthouse = require("lighthouse");
 const { URL } = require("url");
 const { format } = require("date-fns");
@@ -59,7 +59,6 @@ function start() {
       const browser = await puppeteer.launch({
         headless: false,
         defaultViewport: null,
-        args: ["--no-sandbox", "--disable-setuid-sandbox"],
       });
 
       // Lighthouse will open the URL.

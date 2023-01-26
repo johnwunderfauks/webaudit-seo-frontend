@@ -19,7 +19,7 @@
     "pdfkit": "^0.13.0",
     "redis": "^4.5.1",
     "throng": "^4.0.0",
-    "puppeteer": "19.5.2"
+    "puppeteer": "^19.5.2"
   },
   "scripts": {
     "dev": "concurrently -n \"server,client\" \"npm run start:server:dev\" \"npm run start:client\"",

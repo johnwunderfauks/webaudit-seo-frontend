@@ -18,5 +18,6 @@ module.exports = {
     "no-unused-vars": "warn",
     camelcase: "off",
     "no-nested-ternary": "off",
+    "import/no-extraneous-dependencies": ["error", { devDependencies: true }],
   },
 };

@@ -23,7 +23,7 @@ let workQueue = new Queue("work", REDIS_URL);
 //app.use("/", express.static(path.dirname(__dirname) + "/client/build"));
 
 app.get("/", (req, res) =>
-  res.sendFile(path.dirname(__dirname) + "/client/build/index.html", {
+  res.sendFile("/client/build/index.html", {
     root: __dirname,
   })
 );
@@ -66,6 +66,7 @@ app.get("/job/:id", async (req, res) => {
     let state = await job.getState();
     let progress = job._progress;
     let reason = job.failedReason;
+    console.log(reason)
     res.json({ id, state, progress, reason });
   }
 });

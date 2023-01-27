@@ -1,8 +1,3 @@
-/* eslint-disable react/button-has-type */
-/* eslint-disable jsx-a11y/label-has-associated-control */
-/* eslint-disable no-use-before-define */
-/* eslint-disable no-await-in-loop */
-/* eslint-disable no-restricted-syntax */
 import React, { useState, useEffect } from "react";
 import logo from "./logo.svg";
 import "./App.css";

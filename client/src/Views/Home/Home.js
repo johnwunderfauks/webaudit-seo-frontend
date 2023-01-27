@@ -1,6 +1,3 @@
-/* eslint-disable react/destructuring-assignment */
-/* eslint-disable react/prop-types */
-/* eslint-disable react/jsx-props-no-spreading */
 import React, { useEffect, useState, useRef } from "react";
 import {
   Grid,
@@ -56,7 +53,6 @@ function Home() {
   const intervalRef = useRef(null);
 
   const regexEmail =
-    // eslint-disable-next-line no-useless-escape
     /^[a-z0-9][a-z0-9-_\.]+@([a-z]|[a-z0-9]?[a-z0-9-]+[a-z0-9])\.[a-z0-9]{2,10}(?:\.[a-z]{2,10})?$/;
   const handleChangeForm = (e) => {
     setFormData({

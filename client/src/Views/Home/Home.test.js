@@ -3,7 +3,7 @@ import userEvent from "@testing-library/user-event";
 import Home from "./Home";
 
 describe("Home page", () => {
-  test("renders correctly", async () => {
+  test("renders_correctly", async () => {
     render(<Home />);
 
     const emailElement = screen

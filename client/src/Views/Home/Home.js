@@ -170,12 +170,12 @@ function Home() {
                     anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
                   >
                     <Alert
-                      severity="error"
+                      severity={ "success"}
                       onClose={() => {
                         setMessage("");
                       }}
                     >
-                      Success
+                      {message}
                     </Alert>
                   </Snackbar>
                 )}
@@ -199,7 +199,7 @@ function Home() {
                     onBlur={urlValidation}
                     data-testid="form-field-url"
                   />
-                  {!submit && (
+                  {!submit && !message && (
                     <Button
                       // loading={submit}
                       type="submit"
@@ -219,7 +219,7 @@ function Home() {
                       Add data
                     </Button>
                   )}
-                  {submit && (
+                  {submit && !message && (
                     <Box
                       alignItems="center"
                       display="flex"

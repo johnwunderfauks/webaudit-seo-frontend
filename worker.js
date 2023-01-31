@@ -104,7 +104,7 @@ function start() {
       doc.text(lighthouseScores);
 
       // Save the PDF to a file
-      doc.pipe(fs.createWriteStream("./uploads/" + fileName));
+      doc.pipe(fs.createWriteStream("./" + fileName));
       doc.end();
       console.log("Job PDF Done: ", job.id);
       // job.progress(75);

@@ -16,6 +16,7 @@ const { format } = require("date-fns");
 const nodemailer = require("nodemailer");
 const PDFDocument = require("pdfkit");
 const fs = require("fs");
+const path = require('path');
 // Connect to a local redis instance locally, and the Heroku-provided URL in production
 let REDIS_URL = process.env.REDIS_URL || "redis://127.0.0.1:6379";
 
@@ -104,7 +105,7 @@ function start() {
       doc.text(lighthouseScores);
 
       // Save the PDF to a file
-      doc.pipe(fs.createWriteStream(fileName));
+      doc.pipe(fs.createWriteStream(path.join(__dirname, fileName)));
       doc.end();
       console.log("__dirname: ", __dirname);
       console.log("Job PDF Done: ", job.id, fileName);

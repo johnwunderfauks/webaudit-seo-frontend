@@ -98,17 +98,17 @@ function start() {
       // Create a new PDF document
       // job.progress(55);
       const doc = new PDFDocument();
-      var fileName = generateRandomString(15) + ".pdf";
+      var fileName = "./uploads/" + generateRandomString(15) + ".pdf";
       // Add some text and a rectangle
       doc.text("SEO Scores for: " + currURL + "\n");
       doc.text(lighthouseScores);
 
       // Save the PDF to a file
-      doc.pipe(fs.createWriteStream("./" + fileName));
+      doc.pipe(fs.createWriteStream(fileName));
       doc.end();
       console.log("Job PDF Done: ", job.id);
       // job.progress(75);
-      // console.log("Posting to Strapi: ", job.id);
+      console.log("Posting to Strapi: ", job.id);
       // var strapiMsg = "";
       // const strapiResults = await axios
       //   .post(process.env.SEO_AUDIT_RESULTS_URL, strapiData, strapiHeaders)

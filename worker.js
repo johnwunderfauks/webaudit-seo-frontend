@@ -16,7 +16,6 @@ const { format } = require("date-fns");
 const nodemailer = require("nodemailer");
 const PDFDocument = require("pdfkit");
 const fs = require("fs");
-const path = require('path');
 // Connect to a local redis instance locally, and the Heroku-provided URL in production
 let REDIS_URL = process.env.REDIS_URL || "redis://127.0.0.1:6379";
 
@@ -241,30 +240,30 @@ function start() {
       console.log("Job PDF Done: ", job.id, fileName);
       // job.progress(75);
       // console.log("Posting to Strapi: ", job.id);
-      // var strapiMsg = "";
-      // const strapiResults = await axios
-      //   .post(process.env.SEO_AUDIT_RESULTS_URL, strapiData, strapiHeaders)
-      //   .then(function (response) {
-      //     console.log(response.data);
-      //     if (response.data) {
-      //       strapiMsg = "posted to strapi: " + response.data.data.id + "\n";
+      var strapiMsg = "";
+      const strapiResults = await axios
+        .post(process.env.SEO_AUDIT_RESULTS_URL, strapiData, strapiHeaders)
+        .then(function (response) {
+          console.log(response.data);
+          if (response.data) {
+            strapiMsg = "posted to strapi: " + response.data.data.id + "\n";
             sendEmail(currEmail, currURL, fileName);
-        //   } else {
-        //   }
-        //   //res.setHeader("Content-Type", "application/json");
-        //   //res.json(`${strapiMsg}` + `:` + `${lighthouseScores}`);
+          } else {
+          }
+          //res.setHeader("Content-Type", "application/json");
+          //res.json(`${strapiMsg}` + `:` + `${lighthouseScores}`);
 
-        //   browser.close();
-        //   job.progress(100);
-        //   job.state = JobProgress.Completed;
-        //   console.log("Job Done: ", job.id);
-        // })
-        // .catch(function (error) {
-        //   console.log("strapi error ", error);
-        //   job.progress = 1;
-        //   job.state = JobProgress.Failed;
-        //   throw new Error("strapi error ", error);
-        // });
+          browser.close();
+          job.progress(100);
+          job.state = JobProgress.Completed;
+          console.log("Job Done: ", job.id);
+        })
+        .catch(function (error) {
+          console.log("strapi error ", error);
+          job.progress = 1;
+          job.state = JobProgress.Failed;
+          throw new Error("strapi error ", error);
+        });
     } catch (err) {
       console.log("worker error: ", err);
       //log.e("worker error: ", err);

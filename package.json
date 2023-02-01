@@ -28,6 +28,7 @@
     "start:server": "nf start",
     "start:client": "cd ./client && cross-env PORT=4200 npm run start",
     "build": "cd ./client && npm run build",
+    "heroku-prebuild": "rm -rf node_modules package-lock.json && npm cache clean --force",
     "heroku-postbuild": "npm run install:client && npm run build",
     "start": "npm run build && nf start"
   },

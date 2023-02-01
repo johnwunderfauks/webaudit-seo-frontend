@@ -241,6 +241,7 @@ function Home() {
                 height: "100%",
                 marginLeft: "auto",
                 marginRight: "auto",
+                display: {xs: "none", md: "block"}
               }}
             >
               <img

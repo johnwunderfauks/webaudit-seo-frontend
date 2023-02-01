@@ -235,7 +235,7 @@ function start() {
       doc.text(lighthouseScores);
 
       // Save the PDF to a file
-      doc.pipe(fs.createWriteStream(__dirname + fileName));
+      doc.pipe(fs.createWriteStream(__dirname + '/' + fileName));
       doc.end();
       console.log("__dirname: ", __dirname);
       console.log("Job PDF Done: ", job.id, fileName);
@@ -326,7 +326,7 @@ async function sendEmail(userEmail, userURL, pdf) {
       attachments: [
         {
           filename: pdf,
-          path: __dirname + pdf,
+          path: __dirname + '/' + pdf,
         },
       ],
     });

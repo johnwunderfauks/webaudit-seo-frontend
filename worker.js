@@ -59,7 +59,7 @@ function start() {
       const browser = await puppeteer.launch({
         headless: true,
         defaultViewport: null,
-        args: ['--no-sandbox', '--disable-setuid-sandbox']
+        args: ["--no-sandbox", "--disable-setuid-sandbox"],
       });
 
       // Lighthouse will open the URL.

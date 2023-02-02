@@ -234,36 +234,35 @@ function start() {
       doc.text(lighthouseScores);
 
       // Save the PDF to a file
-      doc.pipe(fs.createWriteStream(__dirname + '/' + fileName));
+      doc.pipe(fs.createWriteStream(__dirname + '/uploads/' + fileName));
       doc.end();
-      console.log("__dirname: ", __dirname);
       console.log("Job PDF Done: ", job.id, fileName);
       // job.progress(75);
-      // console.log("Posting to Strapi: ", job.id);
-      // var strapiMsg = "";
-      // const strapiResults = await axios
-      //   .post(process.env.SEO_AUDIT_RESULTS_URL, strapiData, strapiHeaders)
-      //   .then(function (response) {
-      //     console.log(response.data);
-      //     if (response.data) {
-      //       strapiMsg = "posted to strapi: " + response.data.data.id + "\n";
+      console.log("Posting to Strapi: ", job.id);
+      var strapiMsg = "";
+      const strapiResults = await axios
+        .post(process.env.SEO_AUDIT_RESULTS_URL, strapiData, strapiHeaders)
+        .then(function (response) {
+          console.log(response.data);
+          if (response.data) {
+            strapiMsg = "posted to strapi: " + response.data.data.id + "\n";
             sendEmail(currEmail, currURL, fileName);
-      //     } else {
-      //     }
-      //     //res.setHeader("Content-Type", "application/json");
-      //     //res.json(`${strapiMsg}` + `:` + `${lighthouseScores}`);
+          } else {
+          }
+          //res.setHeader("Content-Type", "application/json");
+          //res.json(`${strapiMsg}` + `:` + `${lighthouseScores}`);
 
-      //     browser.close();
-      //     job.progress(100);
-      //     job.state = JobProgress.Completed;
-      //     console.log("Job Done: ", job.id);
-      //   })
-      //   .catch(function (error) {
-      //     console.log("strapi error ", error);
-      //     job.progress = 1;
-      //     job.state = JobProgress.Failed;
-      //     throw new Error("strapi error ", error);
-      //   });
+          browser.close();
+          job.progress(100);
+          job.state = JobProgress.Completed;
+          console.log("Job Done: ", job.id);
+        })
+        .catch(function (error) {
+          console.log("strapi error ", error);
+          job.progress = 1;
+          job.state = JobProgress.Failed;
+          throw new Error("strapi error ", error);
+        });
     } catch (err) {
       console.log("worker error: ", err);
       //log.e("worker error: ", err);
@@ -325,7 +324,7 @@ async function sendEmail(userEmail, userURL, pdf) {
       attachments: [
         {
           filename: pdf,
-          path: __dirname + '/' + pdf,
+          path: __dirname + '/uploads/' + pdf,
         },
       ],
     });

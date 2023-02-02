@@ -57,7 +57,7 @@ function start() {
     try {
       // Use Puppeteer to launch headful Chrome and don't use its default 800x600 viewport.
       const browser = await puppeteer.launch({
-        headless: false,
+        headless: true,
         defaultViewport: null,
         args: ["--no-sandbox", "--disable-setuid-sandbox"],
       });
@@ -71,6 +71,136 @@ function start() {
         output: "json",
         logLevel: "info",
         chromeFlags: "ignore-certificate-errors",
+      }, {
+        extends: 'lighthouse:default',
+        passes: [
+          {
+            passName: 'defaultPass',
+            gatherers: [
+              'custom-audits/gatherers/h1-elements',
+              'custom-audits/gatherers/head-elements',
+              'custom-audits/gatherers/content-elements',
+            ]
+          }
+        ],
+        settings: {
+          onlyCategories: ['technical', 'content', 'experience', 'mobile'],
+        },
+        audits: [
+          // Technical
+          "is-on-https",
+          "seo/robots-txt",
+          "oopif-iframe-test-audit",
+          "dobetterweb/uses-http2",
+          "seo/http-status-code",
+          "redirects",
+          "seo/manual/structured-data",
+          "dobetterweb/dom-size",
+          "metrics/speed-index",
+          "third-party-summary",
+          "seo/canonical",
+          "seo/is-crawlable",
+          "seo/crawlable-anchors",
+          "custom-audits/audits/meta-og-tags",
+          "custom-audits/audits/link-to-http",
+          "custom-audits/audits/url-length",
+          "custom-audits/audits/url-underscore",
+          "custom-audits/audits/url-dynamic-params",
+
+          // Content
+          "seo/meta-description",
+          "accessibility/frame-title",
+          "accessibility/document-title",
+          "accessibility/heading-order",
+          "custom-audits/audits/h1-tag",
+          "custom-audits/audits/meta-description-length",
+          "custom-audits/audits/meta-description-count",
+          "custom-audits/audits/document-title-length",
+          "custom-audits/audits/dead-end-page",
+          "custom-audits/audits/unsafe-links",
+          "custom-audits/audits/content-word-count",
+
+          // Experience
+          "unsized-images",
+          "byte-efficiency/uses-optimized-images",
+          "accessibility/image-alt",
+          "accessibility/input-image-alt",
+          "image-size-responsive",
+          "byte-efficiency/uses-responsive-images",
+          "image-aspect-ratio",
+
+          // Mobile
+          "seo/font-size",
+          "viewport",
+          "accessibility/meta-viewport",
+          "content-width",
+        ],
+        categories: {
+          technical: {
+            title: 'Technical',
+            description: '',
+            auditRefs: [
+              { id: 'is-on-https', weight: 1 },
+              { id: 'robots-txt', weight: 1 },
+              { id: 'oopif-iframe-test-audit', weight: 1 },
+              { id: 'uses-http2', weight: 1 },
+              { id: 'http-status-code', weight: 1 },
+              { id: 'redirects', weight: 1 },
+              { id: 'structured-data', weight: 0 },
+              { id: 'dom-size', weight: 1 },
+              { id: 'speed-index', weight: 1 },
+              { id: 'third-party-summary', weight: 1 },
+              { id: 'canonical', weight: 1 },
+              { id: 'is-crawlable', weight: 1 },
+              { id: 'crawlable-anchors', weight: 1 },
+              { id: 'meta-og-tags', weight: 1 },
+              { id: 'link-to-http', weight: 1 },
+              { id: 'url-length', weight: 1 },
+              { id: 'url-underscore', weight: 1 },
+              { id: 'url-dynamic-params', weight: 1 },
+            ]
+          },
+          content: {
+            title: 'Content',
+            description: '',
+            auditRefs: [
+              { id: 'meta-description', weight: 1 },
+              { id: 'frame-title', weight: 1 },
+              { id: 'document-title', weight: 1 },
+              { id: 'heading-order', weight: 1 },
+              { id: 'h1-tag', weight: 1 },
+              { id: 'meta-description-length', weight: 1 },
+              { id: 'meta-description-count', weight: 1 },
+              { id: 'document-title-length', weight: 1 },
+              { id: 'dead-end-page', weight: 1 },
+              { id: 'unsafe-links', weight: 1 },
+              { id: 'content-word-count', weight: 1 },
+            ]
+          },
+          experience: {
+            title: 'Experience',
+            description: '',
+            auditRefs: [
+              { id: 'unsized-images', weight: 1 },
+              { id: 'uses-optimized-images', weight: 1 },
+              { id: 'image-alt', weight: 1 },
+              { id: 'input-image-alt', weight: 1 },
+              { id: 'image-size-responsive', weight: 1 },
+              { id: 'uses-responsive-images', weight: 1 },
+              { id: 'image-aspect-ratio', weight: 1 },
+            ]
+          },
+          mobile: {
+            title: 'Mobile',
+            description: '',
+            auditRefs: [
+              { id: 'font-size', weight: 1 },
+              { id: 'viewport', weight: 1 },
+              { id: 'meta-viewport', weight: 1 },
+              { id: 'content-width', weight: 1 }
+            ]
+          }
+        }
       });
       var lighthouseScores = `${Object.values(lhr.categories)
         .map((c) => c.score)
@@ -104,9 +234,9 @@ function start() {
       doc.text(lighthouseScores);
 
       // Save the PDF to a file
-      doc.pipe(fs.createWriteStream("./uploads/" + fileName));
+      doc.pipe(fs.createWriteStream(__dirname + '/uploads/' + fileName));
       doc.end();
-      console.log("Job PDF Done: ", job.id);
+      console.log("Job PDF Done: ", job.id, fileName);
       // job.progress(75);
       console.log("Posting to Strapi: ", job.id);
       var strapiMsg = "";
@@ -194,7 +324,7 @@ async function sendEmail(userEmail, userURL, pdf) {
       attachments: [
         {
           filename: pdf,
-          path: "./uploads/" + pdf,
+          path: __dirname + '/uploads/' + pdf,
         },
       ],
     });

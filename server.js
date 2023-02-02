@@ -66,6 +66,7 @@ app.get("/job/:id", async (req, res) => {
     let state = await job.getState();
     let progress = job._progress;
     let reason = job.failedReason;
+    console.log(reason)
     res.json({ id, state, progress, reason });
   }
 });

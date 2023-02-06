@@ -91,7 +91,7 @@ function Home() {
 
   const updateJob = async (data) => {
     if (jobs) {
-      const res = await fetch(`http://localhost:5000/job/${data.id}`);
+      const res = await fetch(`job/${data.id}`);
       const result = await res.json();
       setJobs(jobs);
       setProgress(result.progress);
@@ -125,7 +125,7 @@ function Home() {
     setSubmit(true);
 
     const res = await fetch(
-      `http://localhost:5000/job/?email=${encodeURIComponent(
+      `job/?email=${encodeURIComponent(
         formData.email
       )}&url=${encodeURIComponent(formData.url)}`,
       { method: "POST" }

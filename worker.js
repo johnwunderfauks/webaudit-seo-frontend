@@ -57,7 +57,7 @@ function start() {
     try {
       // Use Puppeteer to launch headful Chrome and don't use its default 800x600 viewport.
       const browser = await puppeteer.launch({
-        headless: true,
+        headless: false,
         defaultViewport: null,
         args: ["--no-sandbox", "--disable-setuid-sandbox"],
       });

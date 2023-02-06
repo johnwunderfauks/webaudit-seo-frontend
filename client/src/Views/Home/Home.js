@@ -79,17 +79,19 @@ function Home() {
 
   useEffect(() => {
     if (progress >= 100) {
-      clearInterval(intervalRef.current);
-      setMessage("Success");
-      intervalRef.current = null;
-      setSubmit(false);
-      setProgress(0);
+      setTimeout(() => {
+        clearInterval(intervalRef.current);
+        setMessage("Success");
+        intervalRef.current = null;
+        setSubmit(false);
+        setProgress(0);
+      }, 800)
     }
   }, [progress]);
 
   const updateJob = async (data) => {
     if (jobs) {
-      const res = await fetch(`job/${data.id}`);
+      const res = await fetch(`http://localhost:5000/job/${data.id}`);
       const result = await res.json();
       setJobs(jobs);
       setProgress(result.progress);
@@ -123,7 +125,7 @@ function Home() {
     setSubmit(true);
 
     const res = await fetch(
-      `job/?email=${encodeURIComponent(
+      `http://localhost:5000/job/?email=${encodeURIComponent(
         formData.email
       )}&url=${encodeURIComponent(formData.url)}`,
       { method: "POST" }
@@ -133,7 +135,7 @@ function Home() {
     setJobs({ id: job.id.id, state: "queued", progress: job.id.progress });
     intervalRef.current = setInterval(() => {
       updateJob(data);
-    }, 1000);
+    }, 200);
   };
   return (
     <>

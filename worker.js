@@ -232,7 +232,7 @@ function start() {
       // Add some text and a rectangle
       doc.text("SEO Scores for: " + currURL + "\n");
       // doc.text(lighthouseScores);
-      lhr.categories.map((c) => {
+      Object.values(lhr.categories).map((c) => {
         doc.moveDown();
         doc.text(`${c.title}: ${c.score}`);
 

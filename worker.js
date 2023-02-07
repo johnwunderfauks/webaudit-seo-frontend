@@ -231,7 +231,18 @@ function start() {
       var fileName = generateRandomString(15) + ".pdf";
       // Add some text and a rectangle
       doc.text("SEO Scores for: " + currURL + "\n");
-      doc.text(lighthouseScores);
+      // doc.text(lighthouseScores);
+      Object.values(lhr.categories).map((c) => {
+        doc.moveDown();
+        doc.text(`${c.title}: ${c.score}`);
+
+        c.auditRefs.map(audit => {
+          doc.moveDown();
+          doc.text(`${audit.id}: ${lhr.audits[audit.id].score}`);
+        });
+
+        doc.moveDown();
+      });
 
       // Save the PDF to a file
       doc.pipe(fs.createWriteStream(__dirname + '/uploads/' + fileName));

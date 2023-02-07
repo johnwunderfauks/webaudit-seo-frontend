@@ -135,7 +135,7 @@ function Home() {
     setJobs({ id: job.id.id, state: "queued", progress: job.id.progress });
     intervalRef.current = setInterval(() => {
       updateJob(data);
-    }, 200);
+    }, 1000);
   };
   return (
     <>

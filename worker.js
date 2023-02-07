@@ -203,8 +203,8 @@ function start() {
         }
       });
       var lighthouseScores = `${Object.values(lhr.categories)
-        .map((c) => `${c.title}: ${c.score}\n${c.auditRefs.map(audit => `${audit.id}: ${lhr.audits[audit.id].score}`).join("\n")}`)
-        .join("\n\n")}`;
+        .map((c) => c.score)
+        .join(", ")}`;
       console.log("Job Lighouse Done: ", job.id);
       job.progress(25);
       //console.log("worker : ", lighthouseScores);

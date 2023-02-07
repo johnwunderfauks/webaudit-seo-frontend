@@ -232,15 +232,15 @@ function start() {
       // Add some text and a rectangle
       doc.text("SEO Scores for: " + currURL + "\n");
       // doc.text(lighthouseScores);
-      lhr.categories.forEach((c) => {
+      lhr.categories.map((c) => {
         doc.moveDown();
         doc.text(`${c.title}: ${c.score}`);
 
-        c.auditRefs.forEach(audit => {
+        c.auditRefs.map(audit => {
           doc.moveDown();
           doc.text(`${audit.id}: ${lhr.audits[audit.id].score}`);
         });
-        
+
         doc.moveDown();
       });
 

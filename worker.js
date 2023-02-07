@@ -230,15 +230,20 @@ function start() {
       const doc = new PDFDocument();
       var fileName = generateRandomString(15) + ".pdf";
       // Add some text and a rectangle
-      doc.text("SEO Scores for: " + currURL + "\n");
+      doc.fontSize(14);
+      doc.text(`SEO Scores for: ${currURL}`);
       // doc.text(lighthouseScores);
+      doc.fontSize(11);
       Object.values(lhr.categories).map((c) => {
         doc.moveDown();
-        doc.text(`${c.title}: ${c.score}`);
+        doc.text(`${c.title}: ${c.score}`, {
+          stroke: true,
+          underline: true
+        });
 
         c.auditRefs.map(audit => {
           doc.moveDown();
-          doc.text(`${audit.id}: ${lhr.audits[audit.id].score}`);
+          doc.text(`${audit.id}: ${lhr.audits[audit.id].score}\n${lhr.audits[audit.id].title}`);
         });
 
         doc.moveDown();

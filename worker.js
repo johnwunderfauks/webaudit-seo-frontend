@@ -205,7 +205,7 @@ function start() {
       // var lighthouseScores = `${Object.values(lhr.categories)
       //   .map((c) => c.score)
       //   .join(", ")}`;
-      var lighthouseScores = JSON.stringify(Object.values(lhr.categories).map(c => {
+      var lighthouseScores = Object.values(lhr.categories).map(c => {
         var audits = c.auditRefs.map(audit => lhr.audits[audit.id]);
 
         return {
@@ -213,7 +213,7 @@ function start() {
           score: c.score,
           audits: audits
         }
-      }));
+      });
       console.log("Job Lighouse Done: ", job.id);
       job.progress(25);
       //console.log("worker : ", lighthouseScores);
@@ -224,7 +224,7 @@ function start() {
           date_created: format(new Date(), "yyyy-MM-dd'T'HH:mm:ssXX"),
           site_email: currEmail,
           site_url: currURL,
-          seo_result: lighthouseScores,
+          seo_result: JSON.stringify(lighthouseScores),
           initial_email: true,
         },
       };

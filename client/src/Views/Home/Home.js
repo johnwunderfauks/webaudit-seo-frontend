@@ -79,11 +79,13 @@ function Home() {
 
   useEffect(() => {
     if (progress >= 100) {
-      clearInterval(intervalRef.current);
-      setMessage("Success");
-      intervalRef.current = null;
-      setSubmit(false);
-      setProgress(0);
+      setTimeout(() => {
+        clearInterval(intervalRef.current);
+        setMessage("Success");
+        intervalRef.current = null;
+        setSubmit(false);
+        setProgress(0);
+      }, 800)
     }
   }, [progress]);
 

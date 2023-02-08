@@ -202,9 +202,18 @@ function start() {
           }
         }
       });
-      var lighthouseScores = `${Object.values(lhr.categories)
-        .map((c) => c.score)
-        .join(", ")}`;
+      // var lighthouseScores = `${Object.values(lhr.categories)
+      //   .map((c) => c.score)
+      //   .join(", ")}`;
+      var lighthouseScores = JSON.stringify(Object.values(lhr.categories).map(c => {
+        var audits = c.auditRefs.map(audit => lhr.audits[audit.id]);
+
+        return {
+          id: c.title,
+          score: c.score,
+          audits: audits
+        }
+      }));
       console.log("Job Lighouse Done: ", job.id);
       job.progress(25);
       //console.log("worker : ", lighthouseScores);

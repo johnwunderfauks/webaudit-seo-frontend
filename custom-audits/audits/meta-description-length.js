@@ -26,6 +26,13 @@ class MetaDescriptionLength extends Audit {
 		* @return {LH.Product}
 		*/
 
+		if(!metaDescription) {
+			return {
+				score: 0,
+				explanation: 'There is not meta-description found.'
+			}
+		}
+
 		const description = metaDescription.content || '';
 		const characterCount = description.trim().length;
 		if (characterCount < min || characterCount > max) {

@@ -84,127 +84,136 @@ function start() {
           }
         ],
         settings: {
-          onlyCategories: ['technical', 'content', 'experience', 'mobile'],
+          onlyCategories: ['common_seo', 'speed', 'security', 'mobile', 'advanced_seo'],
         },
         audits: [
-          // Technical
-          "is-on-https",
-          "seo/robots-txt",
-          "oopif-iframe-test-audit",
-          "dobetterweb/uses-http2",
-          "seo/http-status-code",
-          "redirects",
-          "seo/manual/structured-data",
-          "dobetterweb/dom-size",
-          "metrics/speed-index",
-          "third-party-summary",
-          "seo/canonical",
-          "seo/is-crawlable",
-          "seo/crawlable-anchors",
-          "custom-audits/audits/meta-og-tags",
-          "custom-audits/audits/link-to-http",
-          "custom-audits/audits/url-length",
-          "custom-audits/audits/url-underscore",
-          "custom-audits/audits/url-dynamic-params",
-
-          // Content
-          "seo/meta-description",
-          "accessibility/frame-title",
-          "accessibility/document-title",
-          "accessibility/heading-order",
-          "custom-audits/audits/h1-tag",
+          // Common SEO
+          "accessibility/document-title", // Meta Title test
+          "custom-audits/audits/document-title-length",
+          "seo/meta-description", // Meta Description test
           "custom-audits/audits/meta-description-length",
           "custom-audits/audits/meta-description-count",
-          "custom-audits/audits/document-title-length",
-          "custom-audits/audits/dead-end-page",
-          "custom-audits/audits/unsafe-links",
-          "custom-audits/audits/content-word-count",
+          "custom-audits/audits/meta-og-tags", // Social Media Meta Tags test
+          "accessibility/heading-order", // Headings Tags test
+          "custom-audits/audits/h1-tag",
+          "seo/robots-txt", // Robots.txt Test
+          "custom-audits/audits/sitemap", // Sitemap test
+          "accessibility/image-alt", // Image alt test
+          "byte-efficiency/uses-responsive-images", // Responsive Image test
+          "image-aspect-ratio", // Image Aspect Ratio test
+          'custom-audits/audits/ga-tag', // GA test
+          'custom-audits/audits/favicon', // Favicon test
+          "errors-in-console", // Console Errors test
+          "dobetterweb/charset", // Charset Declaration test
 
-          // Experience
-          "unsized-images",
-          "byte-efficiency/uses-optimized-images",
-          "accessibility/image-alt",
-          "accessibility/input-image-alt",
-          "image-size-responsive",
-          "byte-efficiency/uses-responsive-images",
-          "image-aspect-ratio",
+          // Speed Optimizations
+          "dobetterweb/dom-size", // DOM Size test
+          "metrics/speed-index", // Site Loading Speed test
+          "byte-efficiency/modern-image-formats", // Modern Image Format test
+          "byte-efficiency/unminified-javascript", // JavaScript Minification test
+          "byte-efficiency/unminified-css", // CSS Minification test
+          "byte-efficiency/render-blocking-resources", // Render Blocking Resources test
+          "dobetterweb/doctype", // Doctype test
+          "redirects", // Redirects test
+          "metrics/largest-contentful-paint", // Largest Contentful Paint test
+          "metrics/cumulative-layout-shift", // Cumulative Layout Shift test
+
+          // Security
+          "is-on-https", // SSL Checker and HTTPS test
+          "dobetterweb/uses-http2", // HTTP2 test
+          "custom-audits/audits/unsafe-links", // Unsafe Cross-Origin Links test
 
           // Mobile
-          "seo/font-size",
-          "viewport",
-          "accessibility/meta-viewport",
-          "content-width",
+          "accessibility/meta-viewport", // Meta Viewport test
+
+          // Advanced SEO
+          "custom-audits/audits/custom-404-page", // Custom 404 Error Page test
+          "seo/is-crawlable", // Noindex Tag test
+          "seo/canonical", // Canonical Tag test
+          "seo/crawlable-anchors", // Nofollow Tag test
+          "accessibility/meta-refresh", // Meta Refresh test
         ],
         categories: {
-          technical: {
-            title: 'Technical',
+          common_seo: {
+            title: 'Common SEO',
             description: '',
             auditRefs: [
-              { id: 'is-on-https', weight: 1 },
-              { id: 'robots-txt', weight: 1 },
-              { id: 'oopif-iframe-test-audit', weight: 1 },
-              { id: 'uses-http2', weight: 1 },
-              { id: 'http-status-code', weight: 1 },
-              { id: 'redirects', weight: 1 },
-              { id: 'structured-data', weight: 0 },
-              { id: 'dom-size', weight: 1 },
-              { id: 'speed-index', weight: 1 },
-              { id: 'third-party-summary', weight: 1 },
-              { id: 'canonical', weight: 1 },
-              { id: 'is-crawlable', weight: 1 },
-              { id: 'crawlable-anchors', weight: 1 },
-              { id: 'meta-og-tags', weight: 1 },
-              { id: 'link-to-http', weight: 1 },
-              { id: 'url-length', weight: 1 },
-              { id: 'url-underscore', weight: 1 },
-              { id: 'url-dynamic-params', weight: 1 },
-            ]
-          },
-          content: {
-            title: 'Content',
-            description: '',
-            auditRefs: [
-              { id: 'meta-description', weight: 1 },
-              { id: 'frame-title', weight: 1 },
-              { id: 'document-title', weight: 1 },
-              { id: 'heading-order', weight: 1 },
-              { id: 'h1-tag', weight: 1 },
+              { id: 'document-title', weight: 1 }, // Meta Title test
+              { id: 'document-title-length', weight: 1 },
+              { id: 'meta-description', weight: 1 }, // Meta Description test
               { id: 'meta-description-length', weight: 1 },
               { id: 'meta-description-count', weight: 1 },
-              { id: 'document-title-length', weight: 1 },
-              { id: 'dead-end-page', weight: 1 },
-              { id: 'unsafe-links', weight: 1 },
-              { id: 'content-word-count', weight: 1 },
+              { id: 'meta-og-tags', weight: 1 }, // Social Media Meta Tags test
+              { id: 'heading-order', weight: 1 }, // Headings Tags test
+              { id: 'h1-tag', weight: 1 },
+              { id: 'robots-txt', weight: 1 }, // Robots.txt Test
+              { id: 'sitemap', weight: 1 }, // Sitemap Test
+              { id: 'image-alt', weight: 1 }, // Image alt test
+              { id: 'uses-responsive-images', weight: 1 }, // Responsive Image test
+              { id: 'image-aspect-ratio', weight: 1 }, // Image Aspect Ratio test
+              { id: 'ga-tag', weight: 1 }, // GA test
+              { id: 'favicon', weight: 1 }, // Favicon test
+              { id: 'errors-in-console', weight: 1 }, // Console Errors test
+              { id: 'charset', weight: 1 }, // Charset Declaration test
             ]
           },
-          experience: {
-            title: 'Experience',
+          speed: {
+            title: 'Speed Optimizations',
             description: '',
             auditRefs: [
-              { id: 'unsized-images', weight: 1 },
-              { id: 'uses-optimized-images', weight: 1 },
-              { id: 'image-alt', weight: 1 },
-              { id: 'input-image-alt', weight: 1 },
-              { id: 'image-size-responsive', weight: 1 },
-              { id: 'uses-responsive-images', weight: 1 },
-              { id: 'image-aspect-ratio', weight: 1 },
+              { id: 'dom-size', weight: 1 }, // DOM Size test
+              { id: 'speed-index', weight: 1 }, // Site Loading Speed test
+              { id: 'modern-image-formats', weight: 1 }, // Modern Image Format test
+              { id: 'unminified-javascript', weight: 1 }, // JavaScript Minification test
+              { id: 'unminified-css', weight: 1 }, // CSS Minification test
+              { id: 'render-blocking-resources', weight: 1 }, // Render Blocking Resources test
+              { id: 'doctype', weight: 1 }, // Doctype test
+              { id: 'redirects', weight: 1 }, // Redirects test
+              { id: 'largest-contentful-paint', weight: 1 }, // Largest Contentful Paint test
+              { id: 'cumulative-layout-shift', weight: 1 }, // Cumulative Layout Shift test
+            ]
+          },
+          security: {
+            title: 'Security',
+            description: '',
+            auditRefs: [
+              { id: 'is-on-https', weight: 1 }, // SSL Checker and HTTPS test
+              { id: 'uses-http2', weight: 1 }, // HTTP2 test
+              { id: 'unsafe-links', weight: 1 }, // Unsafe Cross-Origin Links test
             ]
           },
           mobile: {
             title: 'Mobile',
             description: '',
             auditRefs: [
-              { id: 'font-size', weight: 1 },
-              { id: 'viewport', weight: 1 },
-              { id: 'meta-viewport', weight: 1 },
-              { id: 'content-width', weight: 1 }
+              { id: 'meta-viewport', weight: 1 }, // Meta Viewport test
+            ]
+          },
+          advanced_seo: {
+            title: 'Advanced SEO',
+            description: '',
+            auditRefs: [
+              { id: 'custom-404-page', weight: 1 }, // Custom 404 Error Page test
+              { id: 'is-crawlable', weight: 1 }, // Noindex Tag test
+              { id: 'canonical', weight: 1 }, // Canonical Tag test
+              { id: 'crawlable-anchors', weight: 1 }, // Nofollow Tag test
+              { id: 'meta-refresh', weight: 1 }, // Meta Refresh test
             ]
           }
         }
       });
-      var lighthouseScores = `${Object.values(lhr.categories)
-        .map((c) => c.score)
-        .join(", ")}`;
+      // var lighthouseScores = `${Object.values(lhr.categories)
+      //   .map((c) => c.score)
+      //   .join(", ")}`;
+      var lighthouseScores = Object.values(lhr.categories).map(c => {
+        var audits = c.auditRefs.map(audit => lhr.audits[audit.id]);
+
+        return {
+          id: c.title,
+          score: c.score,
+          audits: audits
+        }
+      });
       console.log("Job Lighouse Done: ", job.id);
       job.progress(25);
       //console.log("worker : ", lighthouseScores);
@@ -215,7 +224,7 @@ function start() {
           date_created: format(new Date(), "yyyy-MM-dd'T'HH:mm:ssXX"),
           site_email: currEmail,
           site_url: currURL,
-          seo_result: lighthouseScores,
+          seo_result: JSON.stringify(lighthouseScores),
           initial_email: true,
         },
       };
@@ -230,15 +239,19 @@ function start() {
       const doc = new PDFDocument();
       var fileName = generateRandomString(15) + ".pdf";
       // Add some text and a rectangle
-      doc.text("SEO Scores for: " + currURL + "\n");
+      doc.fontSize(14);
+      doc.text(`SEO Scores for: ${currURL}`);
       // doc.text(lighthouseScores);
+      doc.fontSize(11);
       Object.values(lhr.categories).map((c) => {
         doc.moveDown();
-        doc.text(`${c.title}: ${c.score}`);
+        doc.text(`${c.title}: ${c.score}`, {
+          underline: true
+        });
 
         c.auditRefs.map(audit => {
           doc.moveDown();
-          doc.text(`${audit.id}: ${lhr.audits[audit.id].score}`);
+          doc.text(`${audit.id}: ${lhr.audits[audit.id].score}\n${lhr.audits[audit.id].title}`);
         });
 
         doc.moveDown();

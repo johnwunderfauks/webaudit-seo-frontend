@@ -13,7 +13,7 @@ function App() {
       <Navigation>
         <Routes>
           <Route exact path="/" element={<Home />} />
-          <Route path="/page/:id" element={<Page />}/>
+          <Route path="/page/:title" element={<Page />}/>
           <Route path="*" element={<NotFound />}/>
         </Routes>
       </Navigation>

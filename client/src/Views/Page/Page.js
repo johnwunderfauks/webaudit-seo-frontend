@@ -10,11 +10,14 @@ const Page = () => {
   const [isImageLoaded, setIsImageLoaded] = useState(false);
   const params = useParams();
 
+  const pro_url = "https://webaudit-strapi.herokuapp.com"
+  const dev_url = "http://localhost:1337"
+
   const {
     loading,
     error: fetchError,
     data: resData,
-  } = useFetch(`https://webaudit-strapi.herokuapp.com/api/pages/${params.id}?populate=deep`);
+  } = useFetch(`${pro_url}/api/pages?filters[title][$eqi]=${params.title}&populate=deep`);
 
   if (loading) {
     return (
@@ -27,7 +30,7 @@ const Page = () => {
     );
   }
 
-  if (resData?.error?.message === "Not Found" || resData === null) {
+  if (resData.data.length === 0 || resData?.error?.message === "Not Found" || resData === null) {
     return (
       <Box
         display="flex"
@@ -44,8 +47,10 @@ const Page = () => {
   if (resData?.error?.message === "Internal Server Error") {
     return <NotFound />;
   }
-  const { data, meta } = resData;
-  if (data) {
+  const { data:dataArr , meta } = resData;
+
+  if (dataArr && dataArr.length > 0) {
+    const data = dataArr[0]
     return (
       <div>
         <Helmet>
@@ -61,7 +66,7 @@ const Page = () => {
               <Skeleton variant="rounded" width="auto" height={530} />
             )}
             <img
-              src={`https://webaudit-strapi.herokuapp.com${data.attributes.image.data.attributes.url}`}
+              src={`${pro_url}${data.attributes.image.data.attributes.url}`}
               alt="Image Test"
               width="100%"
               height="100%"

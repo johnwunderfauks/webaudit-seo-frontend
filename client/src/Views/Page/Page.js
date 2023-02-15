@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import useFetch from "../../hooks/useFetch";
 import { Helmet } from "react-helmet";
@@ -6,18 +6,25 @@ import { Box } from "@mui/system";
 import { Skeleton, Typography } from "@mui/material";
 import NotFound from "../NotFound";
 
-const Page = () => {
+const Page = (props) => {
   const [isImageLoaded, setIsImageLoaded] = useState(false);
   const params = useParams();
 
   const pro_url = "https://webaudit-strapi.herokuapp.com"
   const dev_url = "http://localhost:1337"
 
+  let cloneParams = { ...params }
+
   const {
     loading,
     error: fetchError,
     data: resData,
-  } = useFetch(`${pro_url}/api/pages?filters[title][$eqi]=${params.title}&populate=deep`);
+  } = useFetch(`${pro_url}/api/pages?filters[title][$eqi]=${cloneParams.title.replace("-", " ")}&populate=deep`);
+
+  useEffect(() => {
+    let updatedTitle = params.title.replace(" ", "-")
+    window.history.pushState({}, null,  window.location.origin + "/"+ params.title.replace(" ", "-"));
+    }, [params])
 
   if (loading) {
     return (

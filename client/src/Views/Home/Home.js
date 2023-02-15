@@ -12,6 +12,7 @@ import {
   Alert,
 } from "@mui/material";
 import Living_Room from "../../assets/Living_Room.svg";
+import useFetch from "../../hooks/useFetch";
 
 function CircularProgressWithLabel(props) {
   return (
@@ -51,6 +52,13 @@ function Home() {
   const [progress, setProgress] = useState(0);
   const [message, setMessage] = useState("");
   const intervalRef = useRef(null);
+
+  const { loading, error: fetchError, data } = useFetch('http://localhost:1337/api/pages?populate=deep&pagination[page]=1&pagination[pageSize]=1')
+
+  if(data) {
+
+    console.log(data)
+  }
 
   const regexEmail =
     /^[a-z0-9][a-z0-9-_\.]+@([a-z]|[a-z0-9]?[a-z0-9-]+[a-z0-9])\.[a-z0-9]{2,10}(?:\.[a-z]{2,10})?$/;
@@ -97,6 +105,12 @@ function Home() {
       setProgress(result.progress);
     }
   };
+
+  // useEffect(() => {
+  //     fetch("http://localhost:1337/api/pages?populate=*").then(t => t.json())
+  //     .then(res => console.log(res))
+  //     .catch(err => console.log(err))
+  // }, [])
 
   const handleSubmit = async () => {
     let gotError = false;

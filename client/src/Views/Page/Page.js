@@ -14,7 +14,7 @@ const Page = () => {
     loading,
     error: fetchError,
     data: resData,
-  } = useFetch(`${process.env.REACT_APP_STRAPI_API}/api/pages/${params.id}?populate=deep`);
+  } = useFetch(`https://webaudit-strapi.herokuapp.com/api/pages/${params.id}?populate=deep`);
 
   if (loading) {
     return (
@@ -26,7 +26,7 @@ const Page = () => {
       </div>
     );
   }
-  console.log(resData);
+
   if (resData?.error?.message === "Not Found" || resData === null) {
     return (
       <Box
@@ -61,7 +61,7 @@ const Page = () => {
               <Skeleton variant="rounded" width="auto" height={530} />
             )}
             <img
-              src={`${process.env.REACT_APP_STRAPI_API}${data.attributes.image.data.attributes.url}`}
+              src={`https://webaudit-strapi.herokuapp.com${data.attributes.image.data.attributes.url}`}
               alt="Image Test"
               width="100%"
               height="100%"

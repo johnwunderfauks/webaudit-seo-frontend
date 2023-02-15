@@ -13,8 +13,8 @@ function App() {
       <Navigation>
         <Routes>
           <Route exact path="/" element={<Home />} />
-          <Route exact path="/page/:id" element={<Page />}/>
-          <Route exact path="*" element={<NotFound />}/>
+          <Route path="/page/:id" element={<Page />}/>
+          <Route path="*" element={<NotFound />}/>
         </Routes>
       </Navigation>
     </ThemeProvider>

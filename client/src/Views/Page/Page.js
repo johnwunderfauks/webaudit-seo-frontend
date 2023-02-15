@@ -10,8 +10,6 @@ const Page = () => {
   const [isImageLoaded, setIsImageLoaded] = useState(false);
   const params = useParams();
 
-  console.log(process.env)
-
   const {
     loading,
     error: fetchError,
@@ -29,7 +27,7 @@ const Page = () => {
     );
   }
   console.log(resData);
-  if (resData?.error?.message === "Not Found") {
+  if (resData?.error?.message === "Not Found" || resData === null) {
     return (
       <Box
         display="flex"

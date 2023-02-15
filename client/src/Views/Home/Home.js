@@ -53,13 +53,6 @@ function Home() {
   const [message, setMessage] = useState("");
   const intervalRef = useRef(null);
 
-  const { loading, error: fetchError, data } = useFetch('http://localhost:1337/api/pages?populate=deep&pagination[page]=1&pagination[pageSize]=1')
-
-  if(data) {
-
-    console.log(data)
-  }
-
   const regexEmail =
     /^[a-z0-9][a-z0-9-_\.]+@([a-z]|[a-z0-9]?[a-z0-9-]+[a-z0-9])\.[a-z0-9]{2,10}(?:\.[a-z]{2,10})?$/;
   const handleChangeForm = (e) => {

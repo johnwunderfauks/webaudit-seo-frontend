@@ -23,11 +23,8 @@ let workQueue = new Queue("work", REDIS_URL);
 // );
 //app.use("/", express.static(path.dirname(__dirname) + "/client/build"));
 
-app.get("/", (req, res) =>
-  res.sendFile(path.dirname(__dirname) + "/client/build/index.html", {
-    root: __dirname,
-  })
-);
+app.use(express.static(path.join(__dirname, 'build')))
+
 app.use("/static", express.static(__dirname + "/client/build/static"));
 app.post("/api/getresults", async (req, res) => {});
 
@@ -76,6 +73,12 @@ app.get("/job/:id", async (req, res) => {
 workQueue.on("global:completed", (jobId, result) => {
   console.log(`Job completed with result ${result}`);
 });
+
+app.get("/*", (req, res) =>
+  res.sendFile("/client/build/index.html", {
+    root: __dirname,
+  })
+);
 
 app.listen(PORT, () => console.log("Server started!"));
 

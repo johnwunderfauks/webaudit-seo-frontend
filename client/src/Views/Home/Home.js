@@ -12,6 +12,7 @@ import {
   Alert,
 } from "@mui/material";
 import Living_Room from "../../assets/Living_Room.svg";
+import useFetch from "../../hooks/useFetch";
 
 function CircularProgressWithLabel(props) {
   return (
@@ -97,6 +98,12 @@ function Home() {
       setProgress(result.progress);
     }
   };
+
+  // useEffect(() => {
+  //     fetch("http://localhost:1337/api/pages?populate=*").then(t => t.json())
+  //     .then(res => console.log(res))
+  //     .catch(err => console.log(err))
+  // }, [])
 
   const handleSubmit = async () => {
     let gotError = false;

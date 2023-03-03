@@ -86,17 +86,36 @@ function Home() {
         intervalRef.current = null;
         setSubmit(false);
         setProgress(0);
-      }, 800)
+      }, 800);
     }
   }, [progress]);
 
+  let progressVar = 0;
+
   const updateJob = async (data) => {
     if (jobs) {
-      const res = await fetch(`job/${data.id}`);
+      const res = await fetch(`/job/${data.id}`);
       const result = await res.json();
+      
       setJobs(jobs);
-      setProgress(result.progress);
+      if (result.progress === 100) {
+        progressVar = 0;
+        setProgress(100);
+      } else if (jobs.progress > progress) {
+        setProgress(result.progress);
+      } else {
+        progressVar += 1;
+        if (progressVar < 99) {
+          setProgress((prev) => prev + 1);
+        }
+      }
     }
+    // if (jobs) {
+    //   const res = await fetch(`http://localhost:5000/job/${data.id}`);
+    //   const result = await res.json();
+    //   setJobs(jobs);
+    //   setProgress(result.progress);
+    // }
   };
 
   // useEffect(() => {
@@ -142,7 +161,7 @@ function Home() {
     setJobs({ id: job.id.id, state: "queued", progress: job.id.progress });
     intervalRef.current = setInterval(() => {
       updateJob(data);
-    }, 1000);
+    }, 200);
   };
   return (
     <>
@@ -179,7 +198,7 @@ function Home() {
                     anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
                   >
                     <Alert
-                      severity={ "success"}
+                      severity={"success"}
                       onClose={() => {
                         setMessage("");
                       }}
@@ -250,7 +269,7 @@ function Home() {
                 height: "100%",
                 marginLeft: "auto",
                 marginRight: "auto",
-                display: {xs: "none", md: "block"}
+                display: { xs: "none", md: "block" },
               }}
             >
               <img

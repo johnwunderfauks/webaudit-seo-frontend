@@ -96,12 +96,12 @@ function Home() {
     if (jobs) {
       const res = await fetch(`/job/${data.id}`);
       const result = await res.json();
-      
+      console.log(result)
       setJobs(jobs);
       if (result.progress === 100) {
         progressVar = 0;
         setProgress(100);
-      } else if (jobs.progress > progress) {
+      } else if (jobs.progress > progressVar) {
         setProgress(result.progress);
       } else {
         progressVar += 1;
@@ -161,7 +161,7 @@ function Home() {
     setJobs({ id: job.id.id, state: "queued", progress: job.id.progress });
     intervalRef.current = setInterval(() => {
       updateJob(data);
-    }, 200);
+    }, 1000);
   };
   return (
     <>

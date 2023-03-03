@@ -5,6 +5,8 @@ import { Helmet } from "react-helmet";
 import { Box } from "@mui/system";
 import { Skeleton, Typography } from "@mui/material";
 import NotFound from "../NotFound";
+import ReactMarkdown from "react-markdown";
+import rehypeRaw from "rehype-raw";
 
 const Page = (props) => {
   const [isImageLoaded, setIsImageLoaded] = useState(false);
@@ -82,6 +84,9 @@ const Page = (props) => {
 
   if (dataArr && dataArr.length > 0) {
     const data = dataArr[0];
+
+    console.log(data);
+
     return (
       <div>
         <Helmet>
@@ -117,15 +122,49 @@ const Page = (props) => {
           <Typography variant="h4" component="h1" fontWeight="bold" mt={6}>
             {data.attributes.title}
           </Typography>
+          {/* <Typography
+            variant="body1"
+            mt={3}
+            gutterBottom
+            sx={{ lineHeight: 2 }}
+          > */}
           <Typography
             variant="body1"
             mt={3}
             gutterBottom
             sx={{ lineHeight: 2 }}
-            dangerouslySetInnerHTML={{
-              __html: data.attributes.content,
-            }}
-          ></Typography>
+          >
+            <ReactMarkdown
+              rehypePlugins={[rehypeRaw]}
+              children={data.attributes.content}
+              escapeHtml={false}
+              components={{
+                a: ({ node, ...props }) => (
+                  <a
+                   target="_blank"
+                    {...props}
+                  />
+                ),
+                blockquote: ({ node, ...props }) => (
+                  <div
+                    style={{
+                      borderLeft: "6px solid #ccc",
+                      paddingLeft: 10,
+                    }}
+                    {...props}
+                  />
+                ),
+                pre: ({ node, ...props }) => (
+                  <pre
+                    style={{
+                      backgroundColor: "#ccc",
+                    }}
+                    {...props}
+                  />
+                ),
+              }}
+            />
+          </Typography>
         </Box>
       </div>
     );

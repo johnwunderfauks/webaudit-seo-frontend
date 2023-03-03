@@ -96,7 +96,6 @@ function Home() {
     if (jobs) {
       const res = await fetch(`/job/${data.id}`);
       const result = await res.json();
-      console.log(result)
       setJobs(jobs);
       if (result.progress === 100) {
         progressVar = 0;

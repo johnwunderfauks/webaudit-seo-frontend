@@ -98,7 +98,7 @@ const Page = (props) => {
         </Helmet>
         <Box sx={{ maxWidth: 800, marginLeft: "auto", marginRight: "auto" }}>
           {data?.attributes?.image?.data?.attributes.url && (
-            <Box sx={{ maxHeight: 500 }}>
+            <Box sx={{ height: 500 }}>
               {!isImageLoaded && (
                 <Skeleton variant="rounded" width="auto" height={530} />
               )}
@@ -114,7 +114,11 @@ const Page = (props) => {
                   setErrorImg(true);
                   setIsImageLoaded(true);
                 }}
-                style={{ borderRadius: 4 }}
+                style={{
+                  borderRadius: 4,
+                  objectFit: "cover",
+                  objectPosition: "center",
+                }}
               />
             </Box>
           )}
@@ -139,12 +143,19 @@ const Page = (props) => {
               children={data.attributes.content}
               escapeHtml={false}
               components={{
-                a: ({ node, ...props }) => (
-                  <a
-                   target="_blank"
-                    {...props}
-                  />
-                ),
+                img: ({ node, ...props }) => {
+                  return (
+                    <Box style={{ height: "300px" }}>
+                      <img
+                        src={`${pro_url}${node.properties.src}`}
+                        width="100%"
+                        height="100%"
+                        style={{ objectFit: "contain" }}
+                      />
+                    </Box>
+                  );
+                },
+                a: ({ node, ...props }) => <a target="_blank" {...props} />,
                 blockquote: ({ node, ...props }) => (
                   <div
                     style={{

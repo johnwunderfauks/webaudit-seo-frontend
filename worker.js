@@ -85,6 +85,10 @@ function start() {
                 "custom-audits/gatherers/cssinline-element",
                 "custom-audits/gatherers/deprecated-html-tags-element",
                 "custom-audits/gatherers/keywords-elements",
+                'custom-audits/gatherers/nested-table-elements',
+                'custom-audits/gatherers/frameset-elements',
+                'custom-audits/gatherers/ads-txt',
+                'custom-audits/gatherers/object-elements',
               ],
             },
           ],
@@ -128,8 +132,15 @@ function start() {
 
             // Speed Optimizations
             "dobetterweb/dom-size", // DOM Size test
+            "custom-audits/audits/html-compression", // HTML Compression/GZIP test
             "metrics/speed-index", // Site Loading Speed test
+            'bootup-time', // JS Execution Time test
+            'custom-audits/audits/page-cache', // Page Cache test
+            'custom-audits/audits/flash-elements', // Flash test
             "byte-efficiency/modern-image-formats", // Modern Image Format test
+            "custom-audits/audits/image-caching", // Image Caching test
+            "custom-audits/audits/js-caching", // JS Caching test
+            "custom-audits/audits/css-caching", // CSS Caching test
             "byte-efficiency/unminified-javascript", // JavaScript Minification test
             "byte-efficiency/unminified-css", // CSS Minification test
             "byte-efficiency/render-blocking-resources", // Render Blocking Resources test
@@ -137,14 +148,18 @@ function start() {
             "redirects", // Redirects test
             "metrics/largest-contentful-paint", // Largest Contentful Paint test
             "metrics/cumulative-layout-shift", // Cumulative Layout Shift test
+            "custom-audits/audits/nested-tables", // Nested Tables test
+            "custom-audits/audits/frameset-elements", // Frameset test
 
             // Security
             "is-on-https", // SSL Checker and HTTPS test
             "dobetterweb/uses-http2", // HTTP2 test
             "custom-audits/audits/unsafe-links", // Unsafe Cross-Origin Links test
+            "custom-audits/audits/mixed-content", // Mixed Content test
 
             // Mobile
             "accessibility/meta-viewport", // Meta Viewport test
+            "custom-audits/audits/media-query-responsive", // Media Query Responsive test
 
             // Advanced SEO
             "custom-audits/audits/custom-404-page", // Custom 404 Error Page test
@@ -152,6 +167,9 @@ function start() {
             "seo/canonical", // Canonical Tag test
             "seo/crawlable-anchors", // Nofollow Tag test
             "accessibility/meta-refresh", // Meta Refresh test
+            "custom-audits/audits/disallow-directive", // Disallow Directive test
+            "custom-audits/audits/ads-txt", // Ads.txt Validation test
+            "custom-audits/audits/spf-records", // SPF Records test
           ],
           categories: {
             common_seo: {
@@ -190,43 +208,57 @@ function start() {
               title: "Speed Optimizations",
               description: "",
               auditRefs: [
-                { id: "dom-size", weight: 1 }, // DOM Size test
-                { id: "speed-index", weight: 1 }, // Site Loading Speed test
-                { id: "modern-image-formats", weight: 1 }, // Modern Image Format test
-                { id: "unminified-javascript", weight: 1 }, // JavaScript Minification test
-                { id: "unminified-css", weight: 1 }, // CSS Minification test
-                { id: "render-blocking-resources", weight: 1 }, // Render Blocking Resources test
-                { id: "doctype", weight: 1 }, // Doctype test
-                { id: "redirects", weight: 1 }, // Redirects test
-                { id: "largest-contentful-paint", weight: 1 }, // Largest Contentful Paint test
-                { id: "cumulative-layout-shift", weight: 1 }, // Cumulative Layout Shift test
+                { id: 'dom-size', weight: 1 }, // DOM Size test
+                { id: 'html-compression', weight: 1 }, // HTML Compression/GZIP test
+                { id: 'speed-index', weight: 1 }, // Site Loading Speed test
+                { id: 'bootup-time', weight: 1 }, // JS Execution Time test
+                { id: 'page-cache', weight: 1 }, // Page Cache test
+                { id: 'flash-elements', weight: 1 }, // Flash test
+                { id: 'modern-image-formats', weight: 1 }, // Modern Image Format test
+                { id: 'image-caching', weight: 1 }, // Image Caching test
+                { id: 'js-caching', weight: 1 }, // JS Caching test
+                { id: 'css-caching', weight: 1 }, // CSS Caching test
+                { id: 'unminified-javascript', weight: 1 }, // JavaScript Minification test
+                { id: 'unminified-css', weight: 1 }, // CSS Minification test
+                { id: 'render-blocking-resources', weight: 1 }, // Render Blocking Resources test
+                { id: 'doctype', weight: 1 }, // Doctype test
+                { id: 'redirects', weight: 1 }, // Redirects test
+                { id: 'largest-contentful-paint', weight: 1 }, // Largest Contentful Paint test
+                { id: 'cumulative-layout-shift', weight: 1 }, // Cumulative Layout Shift test
+                { id: 'nested-tables', weight: 1 }, // Nested Tables test
+                { id: 'frameset-elements', weight: 1 }, // Frameset test
               ],
             },
             security: {
               title: "Security",
               description: "",
               auditRefs: [
-                { id: "is-on-https", weight: 1 }, // SSL Checker and HTTPS test
-                { id: "uses-http2", weight: 1 }, // HTTP2 test
-                { id: "unsafe-links", weight: 1 }, // Unsafe Cross-Origin Links test
+                { id: 'is-on-https', weight: 1 }, // SSL Checker and HTTPS test
+                { id: 'uses-http2', weight: 1 }, // HTTP2 test
+                { id: 'unsafe-links', weight: 1 }, // Unsafe Cross-Origin Links test
+                { id: 'mixed-content', weight: 1 }, // Mixed Content test
               ],
             },
             mobile: {
               title: "Mobile",
               description: "",
               auditRefs: [
-                { id: "meta-viewport", weight: 1 }, // Meta Viewport test
+                { id: 'meta-viewport', weight: 1 }, // Meta Viewport test
+                { id: 'media-query-responsive', weight: 1 }, // Media Query Responsive test
               ],
             },
             advanced_seo: {
               title: "Advanced SEO",
               description: "",
               auditRefs: [
-                { id: "custom-404-page", weight: 1 }, // Custom 404 Error Page test
-                { id: "is-crawlable", weight: 1 }, // Noindex Tag test
-                { id: "canonical", weight: 1 }, // Canonical Tag test
-                { id: "crawlable-anchors", weight: 1 }, // Nofollow Tag test
-                { id: "meta-refresh", weight: 1 }, // Meta Refresh test
+                { id: 'custom-404-page', weight: 1 }, // Custom 404 Error Page test
+                { id: 'is-crawlable', weight: 1 }, // Noindex Tag test
+                { id: 'canonical', weight: 1 }, // Canonical Tag test
+                { id: 'crawlable-anchors', weight: 1 }, // Nofollow Tag test
+                { id: 'meta-refresh', weight: 1 }, // Meta Refresh test
+                { id: 'disallow-directive', weight: 1 }, // Disallow Directive test
+                { id: 'ads-txt', weight: 1 }, // Ads.txt Validation test
+                { id: 'spf-records', weight: 1 }, // SPF Records test
               ],
             },
           },

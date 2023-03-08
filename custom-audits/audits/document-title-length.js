@@ -14,7 +14,6 @@ class TitleLength extends Audit {
 	static audit(artifacts, context) {
 		const min = 50;
 		const max = 60;
-
 		const documentTitle = artifacts.HeadElements.length > 0 ? artifacts.HeadElements[0].textContent : '';
 
 		if(documentTitle.length < min || documentTitle.length > max) {

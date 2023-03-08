@@ -88,7 +88,6 @@ function start() {
                 'custom-audits/gatherers/nested-table-elements',
                 'custom-audits/gatherers/frameset-elements',
                 'custom-audits/gatherers/ads-txt',
-                'custom-audits/gatherers/object-elements',
               ],
             },
           ],

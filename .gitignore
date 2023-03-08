@@ -4,3 +4,4 @@ yarn.lock
 /client/.eslintrc.js
 .cache
 /testTemp
+uploads/*.pdf

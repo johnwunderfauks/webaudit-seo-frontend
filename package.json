@@ -17,6 +17,7 @@
     "jsdom": "^21.1.0",
     "lighthouse": "^9.6.8",
     "ln": "^0.4.3",
+    "moment": "^2.29.4",
     "nodemailer": "^6.8.0",
     "pdfkit": "^0.13.0",
     "pdfmake": "^0.2.7",

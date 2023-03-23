@@ -29,6 +29,8 @@ const Page = (props) => {
   //   )}&populate=deep`
   // );
 
+  console.log(cloneParams)
+
   const {
     loading,
     error: fetchError,
@@ -38,14 +40,14 @@ const Page = (props) => {
     // `${pro_url}/api/pages?filters[permalink][$eqi]=${cloneParams.title}&populate=deep`
   );
 
-  useEffect(() => {
-    let updatedTitle = params.title.replace(" ", "-");
-    window.history.pushState(
-      {},
-      null,
-      window.location.origin + "/" + params.title.replace(" ", "-")
-    );
-  }, [params]);
+  // useEffect(() => {
+  //   let updatedTitle = params.title.replace(" ", "-");
+  //   window.history.pushState(
+  //     {},
+  //     null,
+  //     window.location.origin + "/" + params.title.replace(" ", "-")
+  //   );
+  // }, [params]);
 
   if (loading) {
     return (
@@ -84,8 +86,6 @@ const Page = (props) => {
 
   if (dataArr && dataArr.length > 0) {
     const data = dataArr[0];
-
-    console.log(data);
 
     return (
       <div>
@@ -126,12 +126,6 @@ const Page = (props) => {
           <Typography variant="h4" component="h1" fontWeight="bold" mt={6}>
             {data.attributes.title}
           </Typography>
-          {/* <Typography
-            variant="body1"
-            mt={3}
-            gutterBottom
-            sx={{ lineHeight: 2 }}
-          > */}
           <Typography
             variant="body1"
             mt={3}

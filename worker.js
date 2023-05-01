@@ -15,6 +15,7 @@ const { format } = require("date-fns");
 const nodemailer = require("nodemailer");
 const PDFDocument = require("pdfkit");
 const fs = require("fs");
+
 // Connect to a local redis instance locally, and the Heroku-provided URL in production
 let REDIS_URL = process.env.REDIS_URL || "redis://127.0.0.1:6379";
 
@@ -83,6 +84,8 @@ function start() {
                 "custom-audits/gatherers/head-elements",
                 "custom-audits/gatherers/content-elements",
                 "custom-audits/gatherers/cssinline-element",
+                "custom-audits/gatherers/cdn-tags",
+                "custom-audits/gatherers/img-elements",
                 "custom-audits/gatherers/deprecated-html-tags-element",
                 "custom-audits/gatherers/keywords-elements",
                 'custom-audits/gatherers/nested-table-elements',
@@ -108,6 +111,7 @@ function start() {
             "custom-audits/audits/keywords-cloud",
             "custom-audits/audits/keywords-usuage",
             "custom-audits/audits/related-keyword",
+            "custom-audits/audits/competitor-domain",
             "custom-audits/audits/document-title-length",
             "seo/meta-description", // Meta Description test
             "custom-audits/audits/meta-description-length",
@@ -135,6 +139,8 @@ function start() {
             "metrics/speed-index", // Site Loading Speed test
             'bootup-time', // JS Execution Time test
             'custom-audits/audits/page-cache', // Page Cache test
+            'custom-audits/audits/cdn-usuage', // CDN Usage Test
+            'custom-audits/audits/img-metadata', // Image MetaData Test
             'custom-audits/audits/flash-elements', // Flash test
             "byte-efficiency/modern-image-formats", // Modern Image Format test
             "custom-audits/audits/image-caching", // Image Caching test
@@ -181,6 +187,7 @@ function start() {
                 { id: "keywords-cloud", weight: 1 },
                 { id: "keywords-usuage", weight: 1 },
                 { id: "related-keyword", weight: 1 },
+                { id: "competitor-domain", weight: 1 },
                 { id: "document-title-length", weight: 1 },
                 { id: "meta-description", weight: 1 }, // Meta Description test
                 { id: "meta-description-length", weight: 1 },
@@ -213,6 +220,8 @@ function start() {
                 { id: 'bootup-time', weight: 1 }, // JS Execution Time test
                 { id: 'page-cache', weight: 1 }, // Page Cache test
                 { id: 'flash-elements', weight: 1 }, // Flash test
+                { id: "cdn-usuage", weight: 1 }, // CDN Usage Test
+                { id: "img-metadata", weight: 1 }, // Image MetaData Test
                 { id: 'modern-image-formats', weight: 1 }, // Modern Image Format test
                 { id: 'image-caching', weight: 1 }, // Image Caching test
                 { id: 'js-caching', weight: 1 }, // JS Caching test
@@ -334,7 +343,7 @@ function start() {
               );
             doc.moveDown();
           }
-          if (audit.id === "errors-in-console") {
+          else if (audit.id === "errors-in-console") {
             // Js Error Test
             doc.fillColor("black").text("Javascript Error Test");
             lhr.audits[audit.id].details.items.map((item) => {
@@ -343,7 +352,7 @@ function start() {
               }
             });
           }
-          if (
+          else if (
             audit.id === "most-common-keywords" ||
             audit.id === "keywords-cloud"
           ) {
@@ -358,7 +367,7 @@ function start() {
               doc.fillColor("black").text(`${item.name} - ${item.count}`);
             });
           }
-          if (audit.id === "keywords-usuage") {
+          else if (audit.id === "keywords-usuage") {
             doc.fillColor("black").text("Keywords Usuage Test");
             lhr.audits[audit.id]?.details?.items.map((item) => {
               doc.fillColor("black").text(`${item.name}`, { underline: true });
@@ -369,7 +378,7 @@ function start() {
               doc.fillColor("black").text(`Headings - ${item.headingSearch}`);
             });
           }
-          if (audit.id === "related-keyword") {
+          else if (audit.id === "related-keyword") {
             doc.fillColor("black").text("Related Keywords Test");
             lhr.audits[audit.id]?.details?.items.map((item) => {
               doc.fillColor("blue").text(item.content, {
@@ -378,7 +387,18 @@ function start() {
             });
             doc.moveDown();
           }
-          if (audit.id === "meta-og-tags") {
+          else if (audit.id === "competitor-domain") {
+            doc.fillColor("black").text("Competitor Domain Test");
+            lhr.audits[audit.id]?.details?.items.map((item) => {
+              let competitorUrl = item.link
+              competitorUrl = competitorUrl.slice(0, competitorUrl.lastIndexOf('/')).replace(/\/\/|.+\/\//, '').replace("www.", "")
+              doc.fillColor("blue").text(competitorUrl, {
+                link: item.link,
+              });
+            });
+            doc.moveDown();
+          }
+          else if (audit.id === "meta-og-tags") {
             doc.fillColor("black").text("Social Media Meta Tags Test");
             lhr.audits[audit.id]?.details?.items.map((item) => {
               doc
@@ -387,7 +407,8 @@ function start() {
                   `${item.property} - ${item.content ? item.content : "null"}`
                 );
             });
-          } else {
+          }
+          else {
             doc
               .fillColor("black")
               .text(

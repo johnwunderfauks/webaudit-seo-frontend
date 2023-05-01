@@ -243,7 +243,7 @@ function Home() {
                       }}
                       onClick={handleSubmit}
                     >
-                      Add data
+                      Submit
                     </Button>
                   )}
                   {submit && !message && (

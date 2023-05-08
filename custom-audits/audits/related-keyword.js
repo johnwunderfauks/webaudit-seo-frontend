@@ -25,18 +25,21 @@ class RelatedKeyword extends Audit {
     function myPromise() {
       return new Promise((resolve, reject) => {
         google(title, function (err, res) {
-          const dom = new JSDOM(res.body);
-          const elements = dom.window.document.querySelectorAll("body .gGQDvd");
+          if (res && res.body) {
+            const dom = new JSDOM(res.body);
+            const elements =
+              dom.window.document.querySelectorAll("body .gGQDvd");
 
-          Array.prototype.slice.call(elements).map((ele) => {
-            const a = ele.querySelector("a")["href"];
+            Array.prototype.slice.call(elements).map((ele) => {
+              const a = ele.querySelector("a")["href"];
 
-            results.push({
-              content: ele.textContent.toLowerCase(),
-              link: "www.google.com" + a,
+              results.push({
+                content: ele.textContent.toLowerCase(),
+                link: "www.google.com" + a,
+              });
             });
-            resolve(results);
-          });
+          }
+          resolve(results);
         });
       });
     }

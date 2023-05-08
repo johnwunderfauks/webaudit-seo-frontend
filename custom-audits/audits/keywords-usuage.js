@@ -129,7 +129,7 @@ class KeywordsUsuage extends Audit {
       metaResults.push(data);
     });
 
-    const metaHeadings = [
+    const headings = [
       { key: "name", itemType: "text", text: "name" },
       { key: "titleSearch", itemType: "boolean", text: "titleSearch" },
       {
@@ -142,7 +142,10 @@ class KeywordsUsuage extends Audit {
 
     return {
       score: 1,
-      details: Audit.makeTableDetails(metaHeadings, metaResults),
+      numericValue: metaResults.length,
+      numericUnit: "related-keyword",
+      displayValue: `${metaResults.length} elements`,
+      details: Audit.makeTableDetails(headings, metaResults),
     };
   }
 }

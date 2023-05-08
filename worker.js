@@ -14,6 +14,11 @@ const { URL } = require("url");
 const { format } = require("date-fns");
 const nodemailer = require("nodemailer");
 const PDFDocument = require("pdfkit");
+const PdfPrinter = require("pdfmake");
+let jsdom = require("jsdom");
+let { JSDOM } = jsdom;
+let { window } = new JSDOM("");
+const htmlToPdfmake = require("html-to-pdfmake");
 const fs = require("fs");
 
 // Connect to a local redis instance locally, and the Heroku-provided URL in production
@@ -31,6 +36,13 @@ let maxJobsPerWorker = 5;
 const JobProgress = {
   Completed: "completed",
   Failed: "failed",
+};
+
+const fonts = {
+  Roboto: {
+    normal: "fonts/Roboto-Regular.ttf",
+    bold: "fonts/Roboto-Medium.ttf",
+  },
 };
 
 function sleep(ms) {
@@ -88,9 +100,9 @@ function start() {
                 "custom-audits/gatherers/img-elements",
                 "custom-audits/gatherers/deprecated-html-tags-element",
                 "custom-audits/gatherers/keywords-elements",
-                'custom-audits/gatherers/nested-table-elements',
-                'custom-audits/gatherers/frameset-elements',
-                'custom-audits/gatherers/ads-txt',
+                "custom-audits/gatherers/nested-table-elements",
+                "custom-audits/gatherers/frameset-elements",
+                "custom-audits/gatherers/ads-txt",
               ],
             },
           ],
@@ -137,11 +149,11 @@ function start() {
             "dobetterweb/dom-size", // DOM Size test
             "custom-audits/audits/html-compression", // HTML Compression/GZIP test
             "metrics/speed-index", // Site Loading Speed test
-            'bootup-time', // JS Execution Time test
-            'custom-audits/audits/page-cache', // Page Cache test
-            'custom-audits/audits/cdn-usuage', // CDN Usage Test
-            'custom-audits/audits/img-metadata', // Image MetaData Test
-            'custom-audits/audits/flash-elements', // Flash test
+            "bootup-time", // JS Execution Time test
+            "custom-audits/audits/page-cache", // Page Cache test
+            "custom-audits/audits/cdn-usuage", // CDN Usage Test
+            "custom-audits/audits/img-metadata", // Image MetaData Test
+            "custom-audits/audits/flash-elements", // Flash test
             "byte-efficiency/modern-image-formats", // Modern Image Format test
             "custom-audits/audits/image-caching", // Image Caching test
             "custom-audits/audits/js-caching", // JS Caching test
@@ -214,59 +226,59 @@ function start() {
               title: "Speed Optimizations",
               description: "",
               auditRefs: [
-                { id: 'dom-size', weight: 1 }, // DOM Size test
-                { id: 'html-compression', weight: 1 }, // HTML Compression/GZIP test
-                { id: 'speed-index', weight: 1 }, // Site Loading Speed test
-                { id: 'bootup-time', weight: 1 }, // JS Execution Time test
-                { id: 'page-cache', weight: 1 }, // Page Cache test
-                { id: 'flash-elements', weight: 1 }, // Flash test
+                { id: "dom-size", weight: 1 }, // DOM Size test
+                { id: "html-compression", weight: 1 }, // HTML Compression/GZIP test
+                { id: "speed-index", weight: 1 }, // Site Loading Speed test
+                { id: "bootup-time", weight: 1 }, // JS Execution Time test
+                { id: "page-cache", weight: 1 }, // Page Cache test
+                { id: "flash-elements", weight: 1 }, // Flash test
                 { id: "cdn-usuage", weight: 1 }, // CDN Usage Test
                 { id: "img-metadata", weight: 1 }, // Image MetaData Test
-                { id: 'modern-image-formats', weight: 1 }, // Modern Image Format test
-                { id: 'image-caching', weight: 1 }, // Image Caching test
-                { id: 'js-caching', weight: 1 }, // JS Caching test
-                { id: 'css-caching', weight: 1 }, // CSS Caching test
-                { id: 'unminified-javascript', weight: 1 }, // JavaScript Minification test
-                { id: 'unminified-css', weight: 1 }, // CSS Minification test
-                { id: 'render-blocking-resources', weight: 1 }, // Render Blocking Resources test
-                { id: 'doctype', weight: 1 }, // Doctype test
-                { id: 'redirects', weight: 1 }, // Redirects test
-                { id: 'largest-contentful-paint', weight: 1 }, // Largest Contentful Paint test
-                { id: 'cumulative-layout-shift', weight: 1 }, // Cumulative Layout Shift test
-                { id: 'nested-tables', weight: 1 }, // Nested Tables test
-                { id: 'frameset-elements', weight: 1 }, // Frameset test
+                { id: "modern-image-formats", weight: 1 }, // Modern Image Format test
+                { id: "image-caching", weight: 1 }, // Image Caching test
+                { id: "js-caching", weight: 1 }, // JS Caching test
+                { id: "css-caching", weight: 1 }, // CSS Caching test
+                { id: "unminified-javascript", weight: 1 }, // JavaScript Minification test
+                { id: "unminified-css", weight: 1 }, // CSS Minification test
+                { id: "render-blocking-resources", weight: 1 }, // Render Blocking Resources test
+                { id: "doctype", weight: 1 }, // Doctype test
+                { id: "redirects", weight: 1 }, // Redirects test
+                { id: "largest-contentful-paint", weight: 1 }, // Largest Contentful Paint test
+                { id: "cumulative-layout-shift", weight: 1 }, // Cumulative Layout Shift test
+                { id: "nested-tables", weight: 1 }, // Nested Tables test
+                { id: "frameset-elements", weight: 1 }, // Frameset test
               ],
             },
             security: {
               title: "Security",
               description: "",
               auditRefs: [
-                { id: 'is-on-https', weight: 1 }, // SSL Checker and HTTPS test
-                { id: 'uses-http2', weight: 1 }, // HTTP2 test
-                { id: 'unsafe-links', weight: 1 }, // Unsafe Cross-Origin Links test
-                { id: 'mixed-content', weight: 1 }, // Mixed Content test
+                { id: "is-on-https", weight: 1 }, // SSL Checker and HTTPS test
+                { id: "uses-http2", weight: 1 }, // HTTP2 test
+                { id: "unsafe-links", weight: 1 }, // Unsafe Cross-Origin Links test
+                { id: "mixed-content", weight: 1 }, // Mixed Content test
               ],
             },
             mobile: {
               title: "Mobile",
               description: "",
               auditRefs: [
-                { id: 'meta-viewport', weight: 1 }, // Meta Viewport test
-                { id: 'media-query-responsive', weight: 1 }, // Media Query Responsive test
+                { id: "meta-viewport", weight: 1 }, // Meta Viewport test
+                { id: "media-query-responsive", weight: 1 }, // Media Query Responsive test
               ],
             },
             advanced_seo: {
               title: "Advanced SEO",
               description: "",
               auditRefs: [
-                { id: 'custom-404-page', weight: 1 }, // Custom 404 Error Page test
-                { id: 'is-crawlable', weight: 1 }, // Noindex Tag test
-                { id: 'canonical', weight: 1 }, // Canonical Tag test
-                { id: 'crawlable-anchors', weight: 1 }, // Nofollow Tag test
-                { id: 'meta-refresh', weight: 1 }, // Meta Refresh test
-                { id: 'disallow-directive', weight: 1 }, // Disallow Directive test
-                { id: 'ads-txt', weight: 1 }, // Ads.txt Validation test
-                { id: 'spf-records', weight: 1 }, // SPF Records test
+                { id: "custom-404-page", weight: 1 }, // Custom 404 Error Page test
+                { id: "is-crawlable", weight: 1 }, // Noindex Tag test
+                { id: "canonical", weight: 1 }, // Canonical Tag test
+                { id: "crawlable-anchors", weight: 1 }, // Nofollow Tag test
+                { id: "meta-refresh", weight: 1 }, // Meta Refresh test
+                { id: "disallow-directive", weight: 1 }, // Disallow Directive test
+                { id: "ads-txt", weight: 1 }, // Ads.txt Validation test
+                { id: "spf-records", weight: 1 }, // SPF Records test
               ],
             },
           },
@@ -307,121 +319,275 @@ function start() {
       console.log("Job Creating PDF: ", job.id);
       // Create a new PDF document
       job.progress(55);
-      const doc = new PDFDocument();
+      // const doc = new PDFDocument();
+      let docData = {
+        content: [],
+        styles: {
+          header: {
+            fontSize: 18,
+          },
+          marginText: {
+            margin: [0, 0, 0, 10],
+          },
+          mainHeader: {
+            fontSize: 20,
+            margin: [0, 0, 0, 10],
+          },
+        },
+      };
       var fileName = generateRandomString(15) + ".pdf";
       // Add some text and a rectangle
-      doc.fontSize(14);
-      doc.text(`SEO Scores for: ${currURL}`);
-      // doc.text(lighthouseScores);
-      doc.fontSize(11);
+      // docData.text(`SEO Scores for: ${currURL}`);
+      docData.content.push({
+        text: `SEO Scores for: ${currURL}`,
+        style: "mainHeader",
+      });
+
       Object.values(lhr.categories).map((c) => {
-        doc.moveDown();
-
-        if (c.title !== "google-preview") {
-          doc.text(`${c.title}: ${c.score}`, {
-            underline: true,
-          });
-        }
-
+        docData.content.push({
+          text: `${c.title}: ${c.score}`,
+          style: "marginText",
+          decoration: "underline",
+        });
         c.auditRefs.map((audit) => {
-          doc.moveDown();
           if (audit.id === "google-preview") {
-            doc
-              .fillColor("blue")
-              .text(lhr.audits[audit.id]?.details?.items[0]?.url, {
-                link: lhr.audits[audit.id]?.details?.items[0]?.url,
-                underline: true,
-              });
-            doc
-              .fillColor("black")
-              .text(
-                `${
-                  lhr.audits[audit.id].details?.items[0].title?.textContent
-                }\n${
-                  lhr.audits[audit.id]?.details.items[0]?.description?.content
-                }`
-              );
-            doc.moveDown();
-          }
-          else if (audit.id === "errors-in-console") {
-            // Js Error Test
-            doc.fillColor("black").text("Javascript Error Test");
+            docData.content.push({
+              text: "Google Search Results Preview Test",
+              style: "marginText",
+            });
+
+            const descriptionLength =
+              lhr.audits[audit.id]?.details.items[0]?.description?.content
+                .count;
+            const description =
+              lhr.audits[audit.id]?.details.items[0]?.description?.content;
+
+            docData.content.push({
+              text: "Desktop version",
+              style: "marginText",
+            });
+
+            docData.content.push({
+              table: {
+                // widths: ["*"],
+                widths: ["90%"],
+                layout: "noBorders",
+                body: [
+                  [
+                    {
+                      text: lhr.audits[audit.id]?.details?.items[0]?.url,
+                      border: [true, true, true, false],
+                      borderColor: ["#eeeeee", "#eeeeee", "#eeeeee", "#eeeeee"],
+                      borderWidth: 3,
+                      color: "green",
+                      fontSize: 10,
+                    },
+                  ],
+                  [
+                    {
+                      text: lhr.audits[audit.id].details?.items[0].title
+                        ?.textContent,
+                      border: [true, false, true, false],
+                      borderColor: ["#eeeeee", "#eeeeee", "#eeeeee", "#eeeeee"],
+                      color: "blue",
+                      fontSize: 16,
+                    },
+                  ],
+                  [
+                    {
+                      text:
+                        descriptionLength > 168
+                          ? `${description.slice(0, 165)}...`
+                          : description,
+                      border: [true, false, true, true],
+                      borderColor: ["#eeeeee", "#eeeeee", "#eeeeee", "#eeeeee"],
+                      color: "#71777d",
+                      fontSize: 10,
+                    },
+                  ],
+                ],
+              },
+              layout: {
+                hLineWidth: function (i, node) {
+                  return 3;
+                },
+                vLineWidth: function (i, node) {
+                  return 3;
+                },
+                paddingLeft: function (i, node) {
+                  return 10;
+                },
+                paddingRight: function (i, node) {
+                  return 10;
+                },
+                paddingTop: function (rowIndex, node, columnIndex) {
+                  return rowIndex == 0 ? 10 : 0;
+                },
+                paddingBottom: function (rowIndex, node, columnIndex) {
+                  return rowIndex == 2 ? 10 : 0;
+                },
+              },
+            });
+            docData.content.push({ text: "", style: "marginText" });
+            docData.content.push({
+              text: "Mobile version",
+              style: "marginText",
+            });
+
+            docData.content.push({
+              table: {
+                // widths: ["*"],
+                widths: ["50%"],
+                layout: "noBorders",
+                body: [
+                  [
+                    {
+                      text: lhr.audits[audit.id]?.details?.items[0]?.url,
+                      border: [true, true, true, false],
+                      borderColor: ["#eeeeee", "#eeeeee", "#eeeeee", "#eeeeee"],
+                      borderWidth: 3,
+                      color: "green",
+                      fontSize: 10,
+                    },
+                  ],
+                  [
+                    {
+                      text: lhr.audits[audit.id].details?.items[0].title
+                        ?.textContent,
+                      border: [true, false, true, false],
+                      borderColor: ["#eeeeee", "#eeeeee", "#eeeeee", "#eeeeee"],
+                      color: "blue",
+                      fontSize: 16,
+                    },
+                  ],
+                  [
+                    {
+                      text:
+                        descriptionLength > 168
+                          ? `${description.slice(0, 165)}...`
+                          : description,
+                      border: [true, false, true, true],
+                      borderColor: ["#eeeeee", "#eeeeee", "#eeeeee", "#eeeeee"],
+                      color: "#71777d",
+                      fontSize: 10,
+                    },
+                  ],
+                ],
+              },
+              layout: {
+                hLineWidth: function (i, node) {
+                  return 3;
+                },
+                vLineWidth: function (i, node) {
+                  return 3;
+                },
+                paddingLeft: function (i, node) {
+                  return 10;
+                },
+                paddingRight: function (i, node) {
+                  return 10;
+                },
+                paddingTop: function (rowIndex, node, columnIndex) {
+                  return rowIndex == 0 ? 10 : 0;
+                },
+                paddingBottom: function (rowIndex, node, columnIndex) {
+                  return rowIndex == 2 ? 10 : 0;
+                },
+              },
+            });
+            docData.content.push({ text: "", style: "marginText" });
+          } else if (audit.id === "errors-in-console") {
+            docData.content.push({ text: "Javascript Error Test" });
+
             lhr.audits[audit.id].details.items.map((item) => {
               if (item.source === "javascript" || item.source === "exception") {
-                doc.fillColor("black").text(item.description);
+                docData.content.push({
+                  text: item.description,
+                  style: "marginText",
+                });
               }
             });
-          }
-          else if (
+          } else if (
             audit.id === "most-common-keywords" ||
             audit.id === "keywords-cloud"
           ) {
-            doc
-              .fillColor("black")
-              .text(
+            docData.content.push({
+              text:
                 audit.id === "most-common-keywords"
                   ? "Most Common Keywords Test"
-                  : "Keywords Cloud Test"
-              );
-            lhr.audits[audit.id]?.details?.items.map((item) => {
-              doc.fillColor("black").text(`${item.name} - ${item.count}`);
+                  : "Keywords Cloud Test",
             });
-          }
-          else if (audit.id === "keywords-usuage") {
-            doc.fillColor("black").text("Keywords Usuage Test");
+
             lhr.audits[audit.id]?.details?.items.map((item) => {
-              doc.fillColor("black").text(`${item.name}`, { underline: true });
-              doc.fillColor("black").text(`title - ${item.titleSearch}`);
-              doc
-                .fillColor("black")
-                .text(`description - ${item.descriptionSearch}`);
-              doc.fillColor("black").text(`Headings - ${item.headingSearch}`);
-            });
-          }
-          else if (audit.id === "related-keyword") {
-            doc.fillColor("black").text("Related Keywords Test");
-            lhr.audits[audit.id]?.details?.items.map((item) => {
-              doc.fillColor("blue").text(item.content, {
-                link: item.link,
+              docData.content.push({
+                text: `${item.name} - ${item.count}`,
               });
             });
-            doc.moveDown();
-          }
-          else if (audit.id === "competitor-domain") {
-            doc.fillColor("black").text("Competitor Domain Test");
+            docData.content.push({ text: "", style: "marginText" });
+          } else if (audit.id === "keywords-usuage") {
+            docData.content.push({ text: "Keywords Usuage Test" });
             lhr.audits[audit.id]?.details?.items.map((item) => {
-              let competitorUrl = item.link
-              competitorUrl = competitorUrl.slice(0, competitorUrl.lastIndexOf('/')).replace(/\/\/|.+\/\//, '').replace("www.", "")
-              doc.fillColor("blue").text(competitorUrl, {
+              docData.content.push({
+                text: item.name,
+                decoration: "underline",
+              });
+              docData.content.push({ text: `title - ${item.titleSearch}` });
+              docData.content.push({
+                text: `description - ${item.descriptionSearch}`,
+              });
+              docData.content.push({
+                text: `Headings - ${item.headingSearch}`,
+              });
+              docData.content.push({ text: "", style: "marginText" });
+            });
+          } else if (audit.id === "related-keyword") {
+            docData.content.push({ text: "Related Keywords Test" });
+            lhr.audits[audit.id]?.details?.items.map((item) => {
+              docData.content.push({
+                text: item.content,
                 link: item.link,
+                color: "blue",
               });
             });
-            doc.moveDown();
-          }
-          else if (audit.id === "meta-og-tags") {
-            doc.fillColor("black").text("Social Media Meta Tags Test");
+            docData.content.push({ text: "", style: "marginText" });
+          } else if (audit.id === "competitor-domain") {
+            docData.content.push({ text: "Competitor Domain Test" });
             lhr.audits[audit.id]?.details?.items.map((item) => {
-              doc
-                .fillColor("black")
-                .text(
-                  `${item.property} - ${item.content ? item.content : "null"}`
-                );
+              let competitorUrl = item.link;
+              competitorUrl = competitorUrl
+                .slice(0, competitorUrl.lastIndexOf("/"))
+                .replace(/\/\/|.+\/\//, "")
+                .replace("www.", "");
+              docData.content.push({
+                text: competitorUrl,
+                link: item.link,
+                color: "blue",
+              });
             });
-          }
-          else {
-            doc
-              .fillColor("black")
-              .text(
-                `${audit.id}: ${lhr.audits[audit.id].score}\n${
-                  lhr.audits[audit.id].title
-                }`
-              );
+            docData.content.push({ text: "", style: "marginText" });
+          } else if (audit.id === "meta-og-tags") {
+            docData.content.push({ text: "Social Media Meta Tags Test" });
+            lhr.audits[audit.id]?.details?.items.map((item) => {
+              docData.content.push({
+                text: `${item.property} - ${
+                  item.content ? item.content : "null"
+                }`,
+              });
+            });
+            docData.content.push({ text: "", style: "marginText" });
+          } else {
+            docData.content.push({
+              text: `${audit.id}: ${lhr.audits[audit.id].score}\n${
+                lhr.audits[audit.id].title
+              }`,
+              style: "marginText",
+            });
           }
         });
-
-        doc.moveDown();
       });
 
+      let printer = new PdfPrinter(fonts);
+      let doc = printer.createPdfKitDocument(docData);
       // Save the PDF to a file
       doc.pipe(fs.createWriteStream(__dirname + "/uploads/" + fileName));
       doc.end();

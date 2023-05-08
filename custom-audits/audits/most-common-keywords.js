@@ -77,7 +77,7 @@ class MostCommonKeywords extends Audit {
 
     if (results.length === 0) {
       return {
-        score: 0,
+        score: 1,
       };
     }
 

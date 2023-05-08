@@ -1,5 +1,6 @@
 const { Audit } = require("lighthouse");
 const path = require('path');
+const fetch = require("node-fetch");
 
 class Sitemap extends Audit {
 	static get meta() {

@@ -38,11 +38,11 @@ class GooglePreview extends Audit {
             }
         ]
         return {
+            score: 1,
             numericValue: results.length,
             numericUnit: 'google-preview',
             displayValue: `${results.length}`,
             details: Audit.makeTableDetails(headings, results),
-            score: 0
 		};
 	}
 }

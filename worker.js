@@ -20,6 +20,7 @@ let { JSDOM } = jsdom;
 let { window } = new JSDOM("");
 const htmlToPdfmake = require("html-to-pdfmake");
 const fs = require("fs");
+const fsPromises = require("fs").promises;
 
 // Connect to a local redis instance locally, and the Heroku-provided URL in production
 let REDIS_URL = process.env.REDIS_URL || "redis://127.0.0.1:6379";
@@ -98,11 +99,13 @@ function start() {
                 "custom-audits/gatherers/cssinline-element",
                 "custom-audits/gatherers/cdn-tags",
                 "custom-audits/gatherers/img-elements",
+                "custom-audits/gatherers/canonical-tags",
                 "custom-audits/gatherers/deprecated-html-tags-element",
                 "custom-audits/gatherers/keywords-elements",
                 "custom-audits/gatherers/nested-table-elements",
                 "custom-audits/gatherers/frameset-elements",
                 "custom-audits/gatherers/ads-txt",
+                "custom-audits/gatherers/allheading-elements",
               ],
             },
           ],
@@ -172,7 +175,11 @@ function start() {
             "is-on-https", // SSL Checker and HTTPS test
             "dobetterweb/uses-http2", // HTTP2 test
             "custom-audits/audits/unsafe-links", // Unsafe Cross-Origin Links test
+            "custom-audits/audits/url-canonicalization", // URL Canonicalization Test
             "custom-audits/audits/mixed-content", // Mixed Content test
+            "custom-audits/audits/safe-browsing", // Safe Browsing test
+            "custom-audits/audits/server-signature", // Server Signature test
+            "custom-audits/audits/directory-browsing", // Directory Browsing Test
 
             // Mobile
             "accessibility/meta-viewport", // Meta Viewport test
@@ -253,8 +260,12 @@ function start() {
               title: "Security",
               description: "",
               auditRefs: [
+                { id: "url-canonicalization", weight: 1 }, // SSL Checker and HTTPS test
                 { id: "is-on-https", weight: 1 }, // SSL Checker and HTTPS test
                 { id: "uses-http2", weight: 1 }, // HTTP2 test
+                { id: "safe-browsing", weight: 1 }, // Safe Browsing test
+                { id: "server-signature", weight: 1 }, // Safe Browsing test
+                { id: "directory-browsing", weight: 1 }, // Directory Browsing Test
                 { id: "unsafe-links", weight: 1 }, // Unsafe Cross-Origin Links test
                 { id: "mixed-content", weight: 1 }, // Mixed Content test
               ],
@@ -287,6 +298,18 @@ function start() {
       // var lighthouseScores = `${Object.values(lhr.categories)
       //   .map((c) => c.score)
       //   .join(", ")}`;
+
+      fsPromises
+      .writeFile(
+        "lhr.json",
+        JSON.stringify(lhr)
+      )
+      .then(() => {
+        console.log("JSON saved");
+      })
+      .catch((er) => {
+        console.log(er);
+      });
 
       var lighthouseScores = Object.values(lhr.categories).map((c) => {
         var audits = c.auditRefs.map((audit) => lhr.audits[audit.id]);
@@ -325,6 +348,9 @@ function start() {
         styles: {
           header: {
             fontSize: 18,
+          },
+          marginSmallText: {
+            margin: [0, 0, 0, 5],
           },
           marginText: {
             margin: [0, 0, 0, 10],
@@ -575,7 +601,17 @@ function start() {
               });
             });
             docData.content.push({ text: "", style: "marginText" });
-          } else {
+          } else if(audit.id === "safe-browsing") {
+            docData.content.push({ text: "Safe Browsing Test" });
+            docData.content.push({ text: lhr.audits[audit.id].title });
+            docData.content.push({ text: "", style: "marginSmallText" });
+            lhr.audits[audit.id]?.details?.items.map((item) => {
+              docData.content.push({
+                text: `- ${item.threatType}`,
+              });
+            });
+            docData.content.push({ text: "", style: "marginText" });
+          }else {
             docData.content.push({
               text: `${audit.id}: ${lhr.audits[audit.id].score}\n${
                 lhr.audits[audit.id].title
